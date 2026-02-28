@@ -74,6 +74,14 @@
   }
   header h2 { font-size: 22px; font-weight: 300; letter-spacing: -0.02em; }
   header h2 span { font-weight: 500; }
+  .web-sup {
+    font-size: 0.45em;
+    font-variant: small-caps;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    vertical-align: super;
+    opacity: 0.7;
+  }
 
   .meta-row { display: flex; align-items: center; gap: 16px; margin-top: 8px; flex-wrap: wrap; }
   .meta-row > span { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
@@ -268,8 +276,8 @@
 
 <div id="app">
   <header>
-    <h1>Lewis &amp; Clark County Sheriff's Office</h1>
-    <h2>Jail <span>Roster</span></h2>
+    <h1>Lewis and Clark County / City of Helena</h1>
+    <h2>Jailbird<sup class="web-sup">WEB</sup></h2>
     <div class="meta-row">
       <span id="print-date">Loading…</span>
       <span class="count-badge" id="total-badge">—</span>
@@ -470,7 +478,7 @@ async function loadRoster() {
         setProgress(`Network error — using stale cache (${fmtAge(age)} old)…`);
         blob = cached.blob;
       } else {
-        showError('Could not load the PDF and no cached copy exists.<br>Check your network and try again.<br><br><b>Error:</b> ' + err.message);
+        initApp([], '', 'Could not load the PDF and no cached copy exists. Check your network or use <b>Open Roster PDF</b> to load a local file.<br><br><b>Error:</b> ' + err.message);
         return;
       }
     }
@@ -479,7 +487,7 @@ async function loadRoster() {
   setProgress('Extracting text…');
   let pdf;
   try { pdf = await loadPDFFromBlob(blob); }
-  catch (err) { showError('Failed to parse PDF: ' + err.message); return; }
+  catch (err) { initApp([], '', 'Failed to parse PDF: ' + err.message); return; }
 
   setProgress('Parsing records…');
   const text = await extractText(pdf);
@@ -523,11 +531,11 @@ let sortField     = 'name';
 let sortDir       = 1;
 
 // ── App init ──────────────────────────────────────────────────────────────────
-function initApp(inmates, printDate) {
+function initApp(inmates, printDate, pdfError) {
   RAW = inmates;
   document.getElementById('print-date').textContent = printDate ? 'Printed ' + printDate : 'Current roster';
-  document.getElementById('total-badge').textContent = inmates.length + ' INMATES';
-  renderAll();
+  document.getElementById('total-badge').textContent = inmates.length ? inmates.length + ' INMATES' : '—';
+  renderAll(pdfError);
   document.getElementById('loading-overlay').style.display = 'none';
   document.getElementById('app').classList.add('visible');
 
@@ -548,7 +556,7 @@ function initApp(inmates, printDate) {
 
   document.getElementById('search').addEventListener('input', e => {
     searchQuery = e.target.value;
-    if (currentFilter !== 'stats') renderAll();
+    if (currentFilter !== 'stats' && currentFilter !== 'counties' && currentFilter !== 'links') renderAll();
   });
 }
 
@@ -610,7 +618,7 @@ const THEAD_HTML = `<tr>
   <th>Search</th>
 </tr>`;
 
-function renderTable(data) {
+function renderTable(data, pdfError) {
   const panel     = document.getElementById('panel-all');
   const table     = panel.querySelector('table');
   const noResults = panel.querySelector('.no-results');
@@ -626,6 +634,13 @@ function renderTable(data) {
 
   if (!data.length) {
     table.style.display = 'none';
+    if (pdfError) {
+      noResults.innerHTML = '⚠ ' + pdfError + '<br><br>All other tabs (Arrest Warrants, County Websites, Links) are fully available.';
+      noResults.style.color = 'var(--muted)';
+    } else {
+      noResults.innerHTML = 'No matching records';
+      noResults.style.color = '';
+    }
     noResults.style.display = '';
     return;
   }
@@ -642,9 +657,9 @@ function renderTable(data) {
   </tr>`).join('');
 }
 
-function renderAll() {
-  document.getElementById('cnt-all').textContent = applySearch(RAW).length;
-  renderTable(getFiltered());
+function renderAll(pdfError) {
+  document.getElementById('cnt-all').textContent = RAW.length ? applySearch(RAW).length : '—';
+  renderTable(getFiltered(), pdfError);
 }
 
 // ── Overview ──────────────────────────────────────────────────────────────────
