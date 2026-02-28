@@ -1,4 +1,4 @@
-# jailbird-web - LC County
+# JailbirdWEB
 
 A single-file browser app for browsing the Lewis & Clark County, Montana jail roster and Helena Municipal Court arrest warrant list. No server required — open `jail.html` directly in any modern browser.
 
