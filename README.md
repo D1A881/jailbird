@@ -128,7 +128,3 @@ Data is public information published by Lewis & Clark County Sheriff's Office an
 - **Fonts** — DM Mono + DM Sans via Google Fonts
 - **Storage** — IndexedDB for PDF caching; no cookies, no `localStorage`
 - **CORS proxy** — [corsproxy.io](https://corsproxy.io) as fallback for cross-origin fetch
-
----
-
-## Android
