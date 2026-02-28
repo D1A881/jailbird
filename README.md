@@ -132,5 +132,3 @@ Data is public information published by Lewis & Clark County Sheriff's Office an
 ---
 
 ## Android
-
-See [`android-webview/README.md`](android-webview/README.md) and [`capacitor-setup/README.md`](capacitor-setup/README.md) for instructions on packaging `jail.html` as a native Android app.
