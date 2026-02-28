@@ -1,95 +1,120 @@
 # JailbirdWEB
 
-A single-file browser app for browsing the Lewis & Clark County, Montana jail roster and Helena Municipal Court arrest warrant list. No server required — open `jail.html` directly in any modern browser.
+A single-file browser app for browsing the Lewis & Clark County, Montana jail roster and Helena Municipal Court arrest warrant list. No server, no installation — open `jail.html` directly in any modern browser.
+
+---
+
+## Quick Start
+
+1. Download `jail.html`
+2. Open it in Chrome, Firefox, Edge, or Safari
+3. The roster PDF loads automatically on first visit and is cached locally for subsequent visits
+
+---
+
+## Downloading Data Files Manually
+
+If the automatic fetch fails (e.g. the county server is blocking your browser, or you're offline), you can download the data files yourself and load them directly into the app.
+
+### Inmate Roster PDF
+
+1. Open the **Links** tab in the app
+2. Click **Inmate Roster PDF** — this opens:
+   ```
+   https://www.lccountymt.gov/files/assets/county/v/0001/sheriff/documents/jail-roster.pdf
+   ```
+3. Your browser will either display or download the PDF. If it displays, press `Ctrl+S` / `Cmd+S` to save it, or right-click → **Save as…**
+4. Save the file anywhere on your computer (e.g. `Downloads/jail-roster.pdf`)
+5. Back in the app, click **Open Roster PDF** (top-right of the header)
+6. Select the file you just saved
+7. The roster will load immediately and the file will be saved to the local cache for future visits
+
+### Arrest Warrant List
+
+1. Open the **Links** tab in the app
+2. Click **Arrest Warrants** — this opens:
+   ```
+   https://www.helenamt.gov/Departments/Municipal-Court/Arrest-Warrants-List
+   ```
+3. Save the page as an HTML file:
+   - **Chrome / Edge:** `Ctrl+S` / `Cmd+S` → choose **Webpage, Single File** (`.mhtml`) or **Webpage, HTML Only** (`.html`) → save
+   - **Firefox:** `Ctrl+S` / `Cmd+S` → choose **Web Page, HTML only** → save
+   - **Safari:** `File → Save As` → **Page Source**
+4. Save the file anywhere (e.g. `Downloads/arrest-warrants.html`)
+5. Back in the app, open the **Arrest Warrants** tab
+6. Click **Open Warrant HTML**
+7. Select the file you just saved
+8. The warrant list will populate with all names and search icons
+
+> **Tip:** Both files can be re-loaded at any time using the same buttons. Loading a new PDF replaces the cached copy for future visits.
 
 ---
 
 ## Features
 
-### Jail Roster (All tab)
-- Loads the inmate roster PDF from Lewis & Clark County Sheriff's Office
-- Parses and displays all records in a sortable table
-- Columns: Name, Age, Sex, Booking Date, Days Elapsed, Booking #, Search
+### All tab — Jail Roster
+- Parses and displays all inmate records in a sortable table
+- Columns: Name, Age, Sex, Booking Date, Days Elapsed, Booking #, Search icons
 - Live search across name, charges, and booking number
-- Click **Open Roster PDF** in the header to load a local PDF instead of fetching from the network
+- If the PDF fails to load, all other tabs remain fully functional and an error message is shown only inside this tab
 
-### PDF Caching
-- On first load the PDF is downloaded and stored locally in **IndexedDB**
-- Subsequent visits load instantly from the local cache (no network request)
-- Cache expires after **1 hour**, at which point a fresh copy is fetched automatically
-- If the network is unavailable, the stale cached copy is used as a fallback
-- Loading a local file via **Open Roster PDF** updates the cache
+### Overview tab
+- Total inmates, male/female split, warrant count, drug-related and violent offense counts, average age
+- Hold type breakdown and top charge category charts
+
+### Arrest Warrants tab
+- Fetches the Helena Municipal Court warrant list live, or load a saved HTML file with **Open Warrant HTML**
+- One name per row with six search icons
+- Live filter input
+
+### County Websites tab
+- Links to all 57 Montana county government websites
+
+### Links tab
+- Direct links to the source data files (see [Downloading Data Files Manually](#downloading-data-files-manually) above)
+
+---
+
+## Search Icons
+
+Each name row has six one-click search icons. The **Plus / Quoted** toggle in the header switches the query format:
+
+| Mode | Format |
+|------|--------|
+| **Plus** (default) | `Firstname+Lastname` |
+| **Quoted** | `"Firstname Lastname"` |
+
+Icons: Facebook · Google · DuckDuckGo · Yandex · Bing · InmateAid
+
+---
+
+## PDF Caching
+
+- First load: PDF is downloaded and stored in **IndexedDB** (browser's on-disk storage)
+- Subsequent visits: loaded from cache instantly — no network request
+- Cache expires after **1 hour**, triggering a background refresh
+- If the network fails and a cached copy exists, the stale copy is used automatically
+- Loading a file via **Open Roster PDF** updates the cache
 
 ### Fetch fallback chain
-The app tries the following in order until one succeeds:
+
+When fetching the PDF automatically, the app tries these in order:
+
 1. `XMLHttpRequest` — direct to county server
 2. `fetch` — direct to county server
 3. `XMLHttpRequest` — via [corsproxy.io](https://corsproxy.io)
 4. `fetch` — via [corsproxy.io](https://corsproxy.io)
 5. Stale IndexedDB cache (if available)
-
-### Search Icons
-Each inmate row includes six one-click search icons:
-
-| Icon | Service |
-|------|---------|
-| ![Facebook](https://img.shields.io/badge/-Facebook-1877F2?style=flat-square&logo=facebook&logoColor=white) | Facebook People Search |
-| ![Google](https://img.shields.io/badge/-Google-4285F4?style=flat-square&logo=google&logoColor=white) | Google |
-| ![DuckDuckGo](https://img.shields.io/badge/-DuckDuckGo-DE5833?style=flat-square&logo=duckduckgo&logoColor=white) | DuckDuckGo |
-| ![Yandex](https://img.shields.io/badge/-Yandex-FC3F1D?style=flat-square) | Yandex |
-| ![Bing](https://img.shields.io/badge/-Bing-008373?style=flat-square&logo=microsoftbing&logoColor=white) | Bing |
-| 🌐 | InmateAid |
-
-**Quoted / Plus toggle** (header button) switches the search query format between:
-- **Plus** (default) — `Firstname+Lastname`
-- **Quoted** — `"Firstname Lastname"`
-
-The toggle applies to all six icons simultaneously, including the Arrest Warrants tab.
-
-### Overview tab
-Statistics summary for the current roster:
-- Total inmates, male/female counts, warrant count, drug-related, violent, average age
-- Hold type breakdown bar chart (Warrant, Charge, Sentenced, DOC Hold, P&P)
-- Top charge category bar chart (Partner/Family Assault, Drug Possession, Burglary/Theft, etc.)
-
-### Arrest Warrants tab
-- Fetches the Helena Municipal Court arrest warrant list from [helenamt.gov](https://www.helenamt.gov/Departments/Municipal-Court/Arrest-Warrants-List)
-- Displays one name per line with the same six search icons
-- Live filter input to search within the list
-- **Open Warrant HTML** button — load a locally saved copy of the warrant page instead of fetching from the network
-- List is loaded lazily on first tab visit and cached for the session
-
-### County Websites tab
-Links to all 57 Montana county government websites in a responsive grid.
-
-### Links tab
-Quick links to:
-- [Helena Arrest Warrants List](https://www.helenamt.gov/Departments/Municipal-Court/Arrest-Warrants-List)
-- [LC County Inmate Roster PDF](https://www.lccountymt.gov/files/assets/county/v/0001/sheriff/documents/jail-roster.pdf)
-
----
-
-## Usage
-
-1. Download `jail.html`
-2. Open it in any modern browser (Chrome, Firefox, Edge, Safari)
-3. The roster loads automatically — no installation, no server needed
-
-To load a saved local copy of the PDF:
-- Click **Open Roster PDF** in the header and select the file
-
-To load a saved local copy of the warrant list:
-- Go to the **Arrest Warrants** tab
-- Click **Open Warrant HTML** and select a locally saved `.html` copy of the Helena warrant page
+6. Inline error in the All tab (all other tabs remain usable)
 
 ---
 
 ## Data Sources
 
-| Source | URL |
-|--------|-----|
-| LC County Jail Roster PDF | `https://www.lccountymt.gov/files/assets/county/v/183/sheriff/documents/pinmates.pdf` |
-| Helena Municipal Court Warrant List | `https://www.helenamt.gov/Departments/Municipal-Court/Arrest-Warrants-List` |
+| Data | URL |
+|------|-----|
+| Inmate Roster PDF | `https://www.lccountymt.gov/files/assets/county/v/0001/sheriff/documents/jail-roster.pdf` |
+| Arrest Warrant List | `https://www.helenamt.gov/Departments/Municipal-Court/Arrest-Warrants-List` |
 
 Data is public information published by Lewis & Clark County Sheriff's Office and the City of Helena Municipal Court.
 
@@ -97,17 +122,15 @@ Data is public information published by Lewis & Clark County Sheriff's Office an
 
 ## Technical Details
 
-- **Single file** — all HTML, CSS, and JavaScript in one `jail.html`
+- **Single file** — all HTML, CSS, and JavaScript in `jail.html`
 - **No build step, no dependencies to install**
 - **PDF parsing** — [PDF.js 3.11](https://mozilla.github.io/pdf.js/) via CDN
 - **Fonts** — DM Mono + DM Sans via Google Fonts
-- **Storage** — IndexedDB for PDF caching; no cookies, no localStorage
-- **CORS proxy** — [corsproxy.io](https://corsproxy.io) as fallback if the county server blocks direct browser requests
+- **Storage** — IndexedDB for PDF caching; no cookies, no `localStorage`
+- **CORS proxy** — [corsproxy.io](https://corsproxy.io) as fallback for cross-origin fetch
 
 ---
 
-## Notes
+## Android
 
-- The county PDF URL may change over time. If the roster fails to load, check the [LC County Sheriff page](https://www.lccountymt.gov/sheriff) for the current link and load the PDF manually using **Open Roster PDF**.
-- The warrant list is updated periodically by Helena Municipal Court; the date is shown in the tab after loading.
-- This app is a read-only viewer. It does not submit any data or communicate with any server other than the county PDF host and corsproxy.io.
+See [`android-webview/README.md`](android-webview/README.md) and [`capacitor-setup/README.md`](capacitor-setup/README.md) for instructions on packaging `jail.html` as a native Android app.
