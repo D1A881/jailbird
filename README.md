@@ -3,7 +3,7 @@
 
 ---
 
-A single-file browser app for browsing the Lewis & Clark County, Montana jail roster and Helena Municipal Court arrest warrant list. No server, no installation — open `jail.html` directly in any modern browser.
+A single-file browser app for browsing the Lewis & Clark County jail roster and Helena Municipal Court arrest warrant list. No server, no installation — open `jail.html` directly in any modern browser.
 
 ---
 
