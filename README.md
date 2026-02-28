@@ -3,17 +3,13 @@
 
 ---
 
-A single-file browser app for browsing the Lewis & Clark County jail roster and Helena Municipal Court arrest warrant list. No server, no installation — open `jail.html` directly in any modern browser.
-
----
+A single-file browser app for browsing the Lewis & Clark County jail roster and Helena Municipal Court arrest warrant list. No server, no installation. Just open `jail.html` directly in any modern browser.
 
 ## Quick Start
 
 1. Download `jail.html`
 2. Open it in Chrome, Firefox, Edge, or Safari
 3. The roster PDF loads automatically on first visit and is cached locally for subsequent visits
-
----
 
 ## Downloading Data Files Manually
 
@@ -22,7 +18,7 @@ If the automatic fetch fails (e.g. the county server is blocking your browser, o
 ### Inmate Roster PDF
 
 1. Open the **Links** tab in the app
-2. Click **Inmate Roster PDF** — this opens:
+2. Click **Inmate Roster PDF** This opens:
    ```
    https://www.lccountymt.gov/files/assets/county/v/0001/sheriff/documents/jail-roster.pdf
    ```
@@ -35,7 +31,7 @@ If the automatic fetch fails (e.g. the county server is blocking your browser, o
 ### Arrest Warrant List
 
 1. Open the **Links** tab in the app
-2. Click **Arrest Warrants** — this opens:
+2. Click **Arrest Warrants** This opens:
    ```
    https://www.helenamt.gov/Departments/Municipal-Court/Arrest-Warrants-List
    ```
@@ -51,11 +47,9 @@ If the automatic fetch fails (e.g. the county server is blocking your browser, o
 
 > **Tip:** Both files can be re-loaded at any time using the same buttons. Loading a new PDF replaces the cached copy for future visits.
 
----
-
 ## Features
 
-### All tab — Jail Roster
+### All tab (Jail Roster)
 - Parses and displays all inmate records in a sortable table
 - Columns: Name, Age, Sex, Booking Date, Days Elapsed, Booking #, Search icons
 - Live search across name, charges, and booking number
