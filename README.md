@@ -1,4 +1,4 @@
-<img width="310" height="453" alt="image" src="https://github.com/user-attachments/assets/d1067499-e9ca-46e5-9df6-9562fa5c8086" />
+<img width="310" height="453" alt="image" src="https://github.com/user-attachments/assets/d1067499-e9ca-46e5-9df6-9562fa5c8086"/>
 
 
 ---
@@ -36,9 +36,9 @@ If the automatic fetch fails (e.g. the county server is blocking your browser, o
    https://www.helenamt.gov/Departments/Municipal-Court/Arrest-Warrants-List
    ```
 3. Save the page as an HTML file:
-   - **Chrome / Edge:** `Ctrl+S` / `Cmd+S` → choose **Webpage, Single File** (`.mhtml`) or **Webpage, HTML Only** (`.html`) → save
-   - **Firefox:** `Ctrl+S` / `Cmd+S` → choose **Web Page, HTML only** → save
-   - **Safari:** `File → Save As` → **Page Source**
+   **Chrome / Edge:** `Ctrl+S` / `Cmd+S` → choose **Webpage, Single File** (`.mhtml`) or **Webpage, HTML Only** (`.html`) → save
+   **Firefox:** `Ctrl+S` / `Cmd+S` → choose **Web Page, HTML only** → save
+   **Safari:** `File → Save As` → **Page Source**
 4. Save the file anywhere (e.g. `Downloads/arrest-warrants.html`)
 5. Back in the app, open the **Arrest Warrants** tab
 6. Click **Open Warrant HTML**
