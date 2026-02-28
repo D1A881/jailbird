@@ -50,25 +50,25 @@ If the automatic fetch fails (e.g. the county server is blocking your browser, o
 ## Features
 
 ### All tab (Jail Roster)
-- Parses and displays all inmate records in a sortable table
-- Columns: Name, Age, Sex, Booking Date, Days Elapsed, Booking #, Search icons
-- Live search across name, charges, and booking number
-- If the PDF fails to load, all other tabs remain fully functional and an error message is shown only inside this tab
+    Parses and displays all inmate records in a sortable table
+    Columns: Name, Age, Sex, Booking Date, Days Elapsed, Booking #, Search icons
+    Live search across name, charges, and booking number
+    If the PDF fails to load, all other tabs remain fully functional and an error message is shown only inside this tab
 
 ### Overview tab
-- Total inmates, male/female split, warrant count, drug-related and violent offense counts, average age
-- Hold type breakdown and top charge category charts
+    Total inmates, male/female split, warrant count, drug-related and violent offense counts, average age
+    Hold type breakdown and top charge category charts
 
 ### Arrest Warrants tab
-- Fetches the Helena Municipal Court warrant list live, or load a saved HTML file with **Open Warrant HTML**
-- One name per row with six search icons
-- Live filter input
+    Fetches the Helena Municipal Court warrant list live, or load a saved HTML file with **Open Warrant HTML**
+    One name per row with six search icons
+    Live filter input
 
 ### County Websites tab
-- Links to all 57 Montana county government websites
+    Links to all 57 Montana county government websites
 
 ### Links tab
-- Direct links to the source data files (see [Downloading Data Files Manually](#downloading-data-files-manually) above)
+    Direct links to the source data files (see [Downloading Data Files Manually](#downloading-data-files-manually) above)
 
 ---
 
@@ -87,20 +87,20 @@ Icons: Facebook · Google · DuckDuckGo · Yandex · Bing · InmateAid
 
 ## PDF Caching
 
-- First load: PDF is downloaded and stored in **IndexedDB** (browser's on-disk storage)
-- Subsequent visits: loaded from cache instantly — no network request
-- Cache expires after **1 hour**, triggering a background refresh
-- If the network fails and a cached copy exists, the stale copy is used automatically
-- Loading a file via **Open Roster PDF** updates the cache
+    First load: PDF is downloaded and stored in **IndexedDB** (browser's on-disk storage)
+    Subsequent visits: loaded from cache instantly. No network request
+    Cache expires after **1 hour**, triggering a background refresh
+    If the network fails and a cached copy exists, the stale copy is used automatically
+    Loading a file via **Open Roster PDF** updates the cache
 
 ### Fetch fallback chain
 
 When fetching the PDF automatically, the app tries these in order:
 
-1. `XMLHttpRequest` — direct to county server
-2. `fetch` — direct to county server
-3. `XMLHttpRequest` — via [corsproxy.io](https://corsproxy.io)
-4. `fetch` — via [corsproxy.io](https://corsproxy.io)
+1. `XMLHttpRequest` direct to county server
+2. `fetch` direct to county server
+3. `XMLHttpRequest` via [corsproxy.io](https://corsproxy.io)
+4. `fetch` via [corsproxy.io](https://corsproxy.io)
 5. Stale IndexedDB cache (if available)
 6. Inline error in the All tab (all other tabs remain usable)
 
@@ -119,9 +119,9 @@ Data is public information published by Lewis & Clark County Sheriff's Office an
 
 ## Technical Details
 
-- **Single file** — all HTML, CSS, and JavaScript in `jail.html`
-- **No build step, no dependencies to install**
-- **PDF parsing** — [PDF.js 3.11](https://mozilla.github.io/pdf.js/) via CDN
-- **Fonts** — DM Mono + DM Sans via Google Fonts
-- **Storage** — IndexedDB for PDF caching; no cookies, no `localStorage`
-- **CORS proxy** — [corsproxy.io](https://corsproxy.io) as fallback for cross-origin fetch
+    **Single file** All HTML, CSS, and JavaScript in `jail.html`
+    **No build step, no dependencies to install**
+    **PDF parsing** [PDF.js 3.11](https://mozilla.github.io/pdf.js/) via CDN
+    **Fonts** DM Mono + DM Sans via Google Fonts
+    **Storage** IndexedDB for PDF caching; no cookies, no `localStorage`
+    **CORS proxy** [corsproxy.io](https://corsproxy.io) as fallback for cross-origin fetch
