@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JailbirdWEB</title>
+<title>LC County Jail Roster</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
@@ -37,6 +37,27 @@
     transition: color 0.15s, border-color 0.15s;
   }
   .open-file-btn:hover { color: var(--text); border-color: var(--accent); }
+  .fmt-combo {
+    display: inline-flex; align-items: center;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 3px; overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .fmt-combo:focus-within { border-color: var(--accent); }
+  .fmt-combo-input {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.04em;
+    color: var(--text); background: transparent; border: none;
+    padding: 3px 6px; width: 100px; outline: none;
+  }
+  .fmt-combo-arrow {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    color: var(--muted); background: var(--surface);
+    border: none; border-left: 1px solid var(--border);
+    padding: 3px 4px; cursor: pointer; outline: none;
+    appearance: none; -webkit-appearance: none;
+  }
+  .fmt-combo-arrow:hover { color: var(--text); }
+  .fmt-combo-arrow option { background: #1a1b1e; color: var(--text); }
   /* ── Loading ── */
   #loading-overlay {
     position: fixed; inset: 0; background: var(--bg);
@@ -287,10 +308,21 @@
         Open Roster PDF
       </button>
       <input type="file" id="pdf-file-input" accept=".pdf,application/pdf" style="display:none">
-      <button class="open-file-btn" id="quotes-toggle" onclick="toggleQuotes()" title="Toggle quoted vs plus-separated search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="13" height="13"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-        <span id="quotes-label">Plus</span>
-      </button>
+      <span class="fmt-combo" title="Search query format — pick a preset or type your own (tokens: first, last)">
+        <input id="fmt-input" class="fmt-combo-input" value="first+last"
+               oninput="onFmtChange()" autocomplete="off" spellcheck="false" placeholder="format…">
+        <select id="fmt-preset" class="fmt-combo-arrow" onchange="onFmtPreset()" title="Pick a preset">
+          <option value="">▾</option>
+          <option value="first+last">first+last</option>
+          <option value="last+first">last+first</option>
+          <option value="first%20last">first%20last</option>
+          <option value="last%20first">last%20first</option>
+          <option value="last%2Cfirst">last%2Cfirst</option>
+          <option value="first%2Clast">first%2Clast</option>
+          <option value="&quot;first last&quot;">"first last"</option>
+          <option value="&quot;last first&quot;">"last first"</option>
+        </select>
+      </span>
     </div>
   </header>
 
@@ -355,15 +387,46 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 const PDF_URL = 'https://www.lccountymt.gov/files/assets/county/v/183/sheriff/documents/pinmates.pdf';
 const PROXY   = 'https://corsproxy.io/?';
 
-// ── Search quote mode ─────────────────────────────────────────────────────────
-let searchQuotes = false; // true = "First Last", false = First+Last
+// ── Search format ─────────────────────────────────────────────────────────────
+let searchFmt = 'first+last'; // default
 
-function toggleQuotes() {
-  searchQuotes = !searchQuotes;
-  document.getElementById('quotes-label').textContent = searchQuotes ? 'Quoted' : 'Plus';
-  // Re-render wherever icons are currently visible
+function buildQuery(first, last) {
+  // Replace the tokens "first" and "last" in whatever the user typed,
+  // then URI-encode only the name parts (not the structural characters).
+  const fmt = searchFmt || 'first+last';
+
+  // Preset shortcuts
+  const presets = {
+    'first+last':   () => encodeURIComponent(first) + '+'   + encodeURIComponent(last),
+    'last+first':   () => encodeURIComponent(last)  + '+'   + encodeURIComponent(first),
+    'first%20last': () => encodeURIComponent(first) + '%20' + encodeURIComponent(last),
+    'last%20first': () => encodeURIComponent(last)  + '%20' + encodeURIComponent(first),
+    'last%2Cfirst': () => encodeURIComponent(last)  + '%2C' + encodeURIComponent(first),
+    'first%2Clast': () => encodeURIComponent(first) + '%2C' + encodeURIComponent(last),
+    '"first last"': () => encodeURIComponent('"' + first + ' ' + last + '"'),
+    '"last first"': () => encodeURIComponent('"' + last  + ' ' + first + '"'),
+  };
+  if (presets[fmt]) return presets[fmt]();
+
+  // Custom template: substitute literal "first" and "last" tokens,
+  // encoding only the name values they expand to.
+  return fmt
+    .replace(/first/g, encodeURIComponent(first))
+    .replace(/last/g,  encodeURIComponent(last));
+}
+
+function onFmtChange() {
+  searchFmt = document.getElementById('fmt-input').value.trim();
   if (currentFilter === 'all') renderAll();
   else if (currentFilter === 'warrants' && typeof window._warrantNames !== 'undefined') renderWarrants(window._warrantNames);
+}
+
+function onFmtPreset() {
+  const sel = document.getElementById('fmt-preset');
+  if (!sel.value) return;
+  document.getElementById('fmt-input').value = sel.value;
+  sel.value = ''; // reset to placeholder so it always shows ▾
+  onFmtChange();
 }
 
 // ── IndexedDB cache ───────────────────────────────────────────────────────────
@@ -722,10 +785,7 @@ function parseName(full) {
 
 function searchIcons(name) {
   const { first, last } = parseName(name);
-  // Build query string based on current toggle mode
-  const q = searchQuotes
-    ? encodeURIComponent(`"${first} ${last}"`)
-    : encodeURIComponent(first) + '+' + encodeURIComponent(last);
+  const q = buildQuery(first, last);
 
   const icons = [
     { title: 'Search Facebook',   href: `https://www.facebook.com/search/people/?q=${q}`,
@@ -736,9 +796,29 @@ function searchIcons(name) {
       svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#DE5833"/><circle cx="50" cy="42" r="24" fill="white"/><circle cx="57" cy="38" r="5" fill="#4C4C4C"/><circle cx="59" cy="37" r="2" fill="white"/><path d="M38 55 Q50 65 62 55" stroke="#4C4C4C" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="72" rx="14" ry="8" fill="#F5A623"/></svg>` },
     { title: 'Search Yandex',     href: `https://yandex.com/search/?text=${q}`,
       svg: `<svg viewBox="0 0 24 24" fill="#FC3F1D"><path d="M14.993 0H12.27C8.274 0 6.01 2.04 6.01 5.388c0 2.774 1.29 4.428 3.93 6.252L6 18.967V19h3.46l4.206-7.938-.93-.618C10.627 8.88 9.75 7.67 9.75 5.28c0-1.986 1.23-3.11 3.41-3.11h1.47V19H17.9V0h-2.907z"/></svg>` },
-    { title: 'Search Bing',       href: `https://www.bing.com/search?q=${q}`,
+    { title: 'Search Bing',         href: `https://www.bing.com/search?q=${q}`,
       svg: `<svg viewBox="0 0 24 24" fill="#008373"><path d="M5 2v16.5l4.5 2.5 8-4.5-3.5-2.5-2.5 1V7l-1.5-.5V2H5zm4.5 7.5l4 1.5-5.5 3V9.5z"/></svg>` },
-    { title: 'Search InmateAid',  href: `https://www.inmateaid.com/search?category=All&q=${q}`,
+    { title: 'Search Yahoo',        href: `https://search.yahoo.com/search?p=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#6001D2"><path d="M0 4h4.5l3.5 6.5L11.5 4H16l-6 10.5V22H6v-7.5L0 4zm16 0h4l-5.5 8.5h-2.5L16 4zm-1 14a1.5 1.5 0 110 3 1.5 1.5 0 010-3z"/></svg>` },
+    { title: 'Search Snapchat',     href: `https://www.snapchat.com/add/${encodeURIComponent(first + last)}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#FFFC00" stroke="#000" stroke-width="0.5"><path d="M12 2C8.5 2 6 4.5 6 8v1c-.8.2-2 .5-2 1.2 0 .5.5.9 1.2 1.1-.2.4-.5.8-1 1-.3.2-.4.5-.2.7.5.7 1.8.8 2.8.9.5.8 1.5 1.8 3 2.2.1.5-.2 1-1 1.5-.5.3-.3.7.2.8.8.2 1.6.3 2 .7.2.2.3.5.5.5s.3-.3.5-.5c.4-.4 1.2-.5 2-.7.5-.1.7-.5.2-.8-.8-.5-1.1-1-1-1.5 1.5-.4 2.5-1.4 3-2.2 1-.1 2.3-.2 2.8-.9.2-.2.1-.5-.2-.7-.5-.2-.8-.6-1-1C19.5 11.1 20 10.7 20 10.2 20 9.5 18.8 9.2 18 9V8c0-3.5-2.5-6-6-6z"/></svg>` },
+    { title: 'Search Instagram',    href: `https://www.instagram.com/explore/search/keyword/?q=${q}`,
+      svg: (() => { const id='ig-'+Math.random().toString(36).slice(2,7); return `<svg viewBox="0 0 24 24" fill="none" stroke="url(#${id})" stroke-width="1.8"><defs><linearGradient id="${id}" x1="0" y1="24" x2="24" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/><stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="#dc2743" stroke="none"/></svg>`; })() },
+    { title: 'Search Twitter/X',    href: `https://twitter.com/search?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>` },
+    { title: 'Search Truth Social', href: `https://truthsocial.com/search?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#E1241A"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/><path d="M9 9h6v2H9zm0 4h6v2H9z"/></svg>` },
+    { title: 'Search YouTube',      href: `https://www.youtube.com/results?search_query=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.5 6.2s-.2-1.6-1-2.3c-.9-1-1.9-1-2.4-1C17.6 2.8 12 2.8 12 2.8s-5.6 0-8.1.1c-.5.1-1.5.1-2.4 1-.7.7-1 2.3-1 2.3S.3 8 .3 9.8v1.7c0 1.8.2 3.5.2 3.5s.2 1.6 1 2.3c.9 1 2.1.9 2.7 1 1.9.2 8.3.2 8.3.2s5.6 0 8.1-.1c.5-.1 1.5-.1 2.4-1 .7-.7 1-2.3 1-2.3s.2-1.7.2-3.5V9.8c-.1-1.8-.2-3.6-.2-3.6zM9.7 14.8V8.4l6.6 3.2-6.6 3.2z"/></svg>` },
+    { title: 'Search Reddit',       href: `https://www.reddit.com/search/?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#FF4500"><circle cx="12" cy="12" r="10"/><path fill="white" d="M20 12a2 2 0 00-2-2 2 2 0 00-1.3.5C15.4 9.7 14 9.2 12.5 9.1l.7-3.2 2.2.5a1.5 1.5 0 103-0.1 1.5 1.5 0 00-2.8.4l-2.5-.5c-.2 0-.3.1-.3.2l-.8 3.6C10 10.1 8.5 10.6 7.3 11.5A2 2 0 004 12a2 2 0 00.9 1.7 3.5 3.5 0 000 .5c0 2.5 2.7 4.5 6.1 4.5s6.1-2 6.1-4.5c0-.2 0-.3 0-.5A2 2 0 0020 12zm-10 2a1 1 0 111-1 1 1 0 01-1 1zm5.5 2.5c-.6.6-1.7.9-3.5.9s-2.9-.3-3.5-.9a.3.3 0 01.5-.5c.5.5 1.4.7 3 .7s2.5-.2 3-.7a.3.3 0 01.5.5zm-.5-1.5a1 1 0 111-1 1 1 0 01-1 1z"/></svg>` },
+    { title: 'Search TikTok',       href: `https://www.tiktok.com/search?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 3.4A4.8 4.8 0 0115 0h-3v16.5a2.5 2.5 0 01-2.5 2 2.5 2.5 0 01-2.5-2.5 2.5 2.5 0 012.5-2.5c.3 0 .5 0 .7.1V10a6.5 6.5 0 00-.7 0 6 6 0 00-6 6 6 6 0 006 6 6 6 0 006-6V8.2a8 8 0 004.6 1.5V6.5a4.8 4.8 0 01-2.5-.9 4.8 4.8 0 01-3-2.2z"/><path fill="#69C9D0" d="M17.1 5.6A4.8 4.8 0 0115 0h-1a5.8 5.8 0 003.1 5.6z" opacity=".8"/></svg>` },
+    { title: 'Search WhatsApp',     href: `https://wa.me/?text=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#25D366"><path d="M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.3-1.6A12 12 0 0012 24c6.6 0 12-5.4 12-12S18.6 0 12 0zm6.2 16.8c-.3.8-1.4 1.5-2 1.6-.5.1-1.1.1-1.7-.1-.4-.1-.9-.3-1.5-.6-2.6-1.1-4.3-3.7-4.5-3.9-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.5c-.1.1-.2.3-.1.5.3.5.8 1.2 1.4 1.7.7.6 1.3.9 1.6 1 .2.1.4.1.5-.1l.5-.6c.2-.2.3-.2.5-.1l2 .9c.2.1.3.2.3.4v.1z"/></svg>` },
+    { title: 'Search LinkedIn',     href: `https://www.linkedin.com/search/results/people/?keywords=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.4 2H3.6A1.6 1.6 0 002 3.6v16.8A1.6 1.6 0 003.6 22h16.8a1.6 1.6 0 001.6-1.6V3.6A1.6 1.6 0 0020.4 2zM8 19H5.5V10H8v9zM6.7 8.7A1.5 1.5 0 115.2 7.2a1.5 1.5 0 011.5 1.5zm12.3 10.3h-2.5v-4.4c0-1 0-2.4-1.4-2.4s-1.6 1.1-1.6 2.3V19H11V10h2.4v1.2h.1a2.7 2.7 0 012.4-1.3c2.5 0 3 1.7 3 3.8v5.3z"/></svg>` },
+    { title: 'Search InmateAid',    href: `https://www.inmateaid.com/search?category=All&q=${q}`,
       svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9"/><path d="M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3.6" y1="8" x2="20.4" y2="8"/><line x1="3.6" y1="16" x2="20.4" y2="16"/></svg>` },
   ];
 
