@@ -1,4 +1,5 @@
 <img width="512" height="512" alt="image" src="https://github.com/user-attachments/assets/73602445-fd7d-42b2-84f8-8b5c6cf19627" />
+<img width="600" height="75" alt="jailbird_web_logo_692x692" src="https://github.com/user-attachments/assets/38fd96ed-d6be-4814-bb9e-4c327cce6a3b" />
 
 ---
 
