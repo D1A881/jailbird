@@ -391,11 +391,8 @@ const PROXY   = 'https://corsproxy.io/?';
 let searchFmt = 'first+last'; // default
 
 function buildQuery(first, last) {
-  // Replace the tokens "first" and "last" in whatever the user typed,
-  // then URI-encode only the name parts (not the structural characters).
   const fmt = searchFmt || 'first+last';
 
-  // Preset shortcuts
   const presets = {
     'first+last':   () => encodeURIComponent(first) + '+'   + encodeURIComponent(last),
     'last+first':   () => encodeURIComponent(last)  + '+'   + encodeURIComponent(first),
@@ -408,11 +405,10 @@ function buildQuery(first, last) {
   };
   if (presets[fmt]) return presets[fmt]();
 
-  // Custom template: substitute literal "first" and "last" tokens,
-  // encoding only the name values they expand to.
+  // Fix #4: use word boundaries so tokens like "lastname" aren't partially matched
   return fmt
-    .replace(/first/g, encodeURIComponent(first))
-    .replace(/last/g,  encodeURIComponent(last));
+    .replace(/\bfirst\b/g, encodeURIComponent(first))
+    .replace(/\blast\b/g,  encodeURIComponent(last));
 }
 
 function onFmtChange() {
@@ -425,7 +421,7 @@ function onFmtPreset() {
   const sel = document.getElementById('fmt-preset');
   if (!sel.value) return;
   document.getElementById('fmt-input').value = sel.value;
-  sel.value = ''; // reset to placeholder so it always shows ▾
+  sel.value = '';
   onFmtChange();
 }
 
@@ -559,6 +555,8 @@ async function loadRoster() {
 }
 
 // ── Parser ────────────────────────────────────────────────────────────────────
+// Fix #1: name group requires LAST, FIRST (comma mandatory); lookahead updated to match.
+// Removed post-match state/county bleed cleanup — the strict comma format makes it unnecessary.
 function parseRoster(text) {
   const dateMatch = text.match(/Printed on ([A-Za-z]+ \d{1,2},\s*\d{4})/);
   const printDate = dateMatch ? dateMatch[1] : '';
@@ -571,15 +569,13 @@ function parseRoster(text) {
     .trim();
 
   const inmates = [];
-  const re = /([A-Z][A-Z\-']{0,29}(?:,\s*[A-Z][A-Z\-']{0,29})?(?:\s+[A-Z][A-Z\-']{0,29}(?:\s+(?:JR|SR|II|III|IV))?)?)\s+(\d{1,3})\s+(Male|Female)\s+(\d{2}\/\d{2}\/\d{2,4}\s+\d{2}:\d{2})\s+([\d]{2}-[\d]{4,6})\s+(.*?)(?=(?:[A-Z][A-Z\-']{0,29}(?:,\s*[A-Z]|\s+[A-Z]).*?\s+\d{1,3}\s+(?:Male|Female))|$)/g;
+  const re = /([A-Z][A-Z\-']{0,29},\s*[A-Z][A-Z\-']{0,29})\s+(\d{1,3})\s+(Male|Female)\s+(\d{2}\/\d{2}\/\d{2,4}\s+\d{2}:\d{2})\s+([\d]{2}-[\d]{4,6})\s+(.*?)(?=(?:[A-Z][A-Z\-']{0,29},\s*[A-Z].*?\s+\d{1,3}\s+(?:Male|Female))|$)/g;
 
   let m;
   while ((m = re.exec(text)) !== null) {
     const age = parseInt(m[2], 10);
     if (age < 1 || age > 110) continue;
-    let name = m[1].replace(/\s+/g, ' ').trim();
-    name = name.replace(/\s+(?:MT|TX|WA|CO|ID|OR|CA|COUNTY|CLARK|LEWIS|CASCADE|POWELL|FLATHEAD|GALLATIN|SILVERBOW|JEFFERSON|PRAIRIE|DAWSON|HENDERSON)$/i, '').trim();
-    if (name.length < 2) continue;
+    const name = m[1].replace(/\s+/g, ' ').trim();
     inmates.push({ name, age, sex: m[3], booking: m[4].trim(), num: m[5].trim(), holds: m[6].replace(/\s+/g, ' ').trim() });
   }
 
@@ -768,7 +764,8 @@ function renderStats() {
 }
 
 // ── Search icons ──────────────────────────────────────────────────────────────
-function parseName(full) {
+// Fix #2 & #3: parseName() inlined here; separate function removed.
+function searchIcons(full) {
   full = full.trim();
   let last = full, first = '';
   if (full.includes(',')) {
@@ -780,45 +777,47 @@ function parseName(full) {
     first = parts[1] && !['JR','SR','II','III','IV'].includes(parts[1].toUpperCase()) ? parts[1] : '';
   }
   const tc = s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
-  return { first: tc(first), last: tc(last) };
-}
+  first = tc(first); last = tc(last);
 
-function searchIcons(name) {
-  const { first, last } = parseName(name);
   const q = buildQuery(first, last);
 
   const icons = [
-    { title: 'Search Facebook',   href: `https://www.facebook.com/search/people/?q=${q}`,
-      svg: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>` },
+    // ── Search engines ────────────────────────────────────────────────────────
     { title: 'Search Google',     href: `https://www.google.com/search?q=${q}`,
       svg: `<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>` },
+    { title: 'Search Bing',       href: `https://www.bing.com/search?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#008373"><path d="M5 2v16.5l4.5 2.5 8-4.5-3.5-2.5-2.5 1V7l-1.5-.5V2H5zm4.5 7.5l4 1.5-5.5 3V9.5z"/></svg>` },
     { title: 'Search DuckDuckGo', href: `https://duckduckgo.com/?q=${q}`,
       svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#DE5833"/><circle cx="50" cy="42" r="24" fill="white"/><circle cx="57" cy="38" r="5" fill="#4C4C4C"/><circle cx="59" cy="37" r="2" fill="white"/><path d="M38 55 Q50 65 62 55" stroke="#4C4C4C" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="72" rx="14" ry="8" fill="#F5A623"/></svg>` },
+    { title: 'Search Yahoo',      href: `https://search.yahoo.com/search?p=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#6001D2"><path d="M0 4h4.5l3.5 6.5L11.5 4H16l-6 10.5V22H6v-7.5L0 4zm16 0h4l-5.5 8.5h-2.5L16 4zm-1 14a1.5 1.5 0 110 3 1.5 1.5 0 010-3z"/></svg>` },
     { title: 'Search Yandex',     href: `https://yandex.com/search/?text=${q}`,
       svg: `<svg viewBox="0 0 24 24" fill="#FC3F1D"><path d="M14.993 0H12.27C8.274 0 6.01 2.04 6.01 5.388c0 2.774 1.29 4.428 3.93 6.252L6 18.967V19h3.46l4.206-7.938-.93-.618C10.627 8.88 9.75 7.67 9.75 5.28c0-1.986 1.23-3.11 3.41-3.11h1.47V19H17.9V0h-2.907z"/></svg>` },
-    { title: 'Search Bing',         href: `https://www.bing.com/search?q=${q}`,
-      svg: `<svg viewBox="0 0 24 24" fill="#008373"><path d="M5 2v16.5l4.5 2.5 8-4.5-3.5-2.5-2.5 1V7l-1.5-.5V2H5zm4.5 7.5l4 1.5-5.5 3V9.5z"/></svg>` },
-    { title: 'Search Yahoo',        href: `https://search.yahoo.com/search?p=${q}`,
-      svg: `<svg viewBox="0 0 24 24" fill="#6001D2"><path d="M0 4h4.5l3.5 6.5L11.5 4H16l-6 10.5V22H6v-7.5L0 4zm16 0h4l-5.5 8.5h-2.5L16 4zm-1 14a1.5 1.5 0 110 3 1.5 1.5 0 010-3z"/></svg>` },
-    { title: 'Search Snapchat',     href: `https://www.snapchat.com/add/${encodeURIComponent(first + last)}`,
-      svg: `<svg viewBox="0 0 24 24" fill="#FFFC00" stroke="#000" stroke-width="0.5"><path d="M12 2C8.5 2 6 4.5 6 8v1c-.8.2-2 .5-2 1.2 0 .5.5.9 1.2 1.1-.2.4-.5.8-1 1-.3.2-.4.5-.2.7.5.7 1.8.8 2.8.9.5.8 1.5 1.8 3 2.2.1.5-.2 1-1 1.5-.5.3-.3.7.2.8.8.2 1.6.3 2 .7.2.2.3.5.5.5s.3-.3.5-.5c.4-.4 1.2-.5 2-.7.5-.1.7-.5.2-.8-.8-.5-1.1-1-1-1.5 1.5-.4 2.5-1.4 3-2.2 1-.1 2.3-.2 2.8-.9.2-.2.1-.5-.2-.7-.5-.2-.8-.6-1-1C19.5 11.1 20 10.7 20 10.2 20 9.5 18.8 9.2 18 9V8c0-3.5-2.5-6-6-6z"/></svg>` },
-    { title: 'Search Instagram',    href: `https://www.instagram.com/explore/search/keyword/?q=${q}`,
+    // ── Social — identity-focused ─────────────────────────────────────────────
+    { title: 'Search Facebook',   href: `https://www.facebook.com/search/people/?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>` },
+    { title: 'Search LinkedIn',   href: `https://www.linkedin.com/search/results/people/?keywords=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.4 2H3.6A1.6 1.6 0 002 3.6v16.8A1.6 1.6 0 003.6 22h16.8a1.6 1.6 0 001.6-1.6V3.6A1.6 1.6 0 0020.4 2zM8 19H5.5V10H8v9zM6.7 8.7A1.5 1.5 0 115.2 7.2a1.5 1.5 0 011.5 1.5zm12.3 10.3h-2.5v-4.4c0-1 0-2.4-1.4-2.4s-1.6 1.1-1.6 2.3V19H11V10h2.4v1.2h.1a2.7 2.7 0 012.4-1.3c2.5 0 3 1.7 3 3.8v5.3z"/></svg>` },
+    { title: 'Search Instagram',  href: `https://www.instagram.com/explore/search/keyword/?q=${q}`,
       svg: (() => { const id='ig-'+Math.random().toString(36).slice(2,7); return `<svg viewBox="0 0 24 24" fill="none" stroke="url(#${id})" stroke-width="1.8"><defs><linearGradient id="${id}" x1="0" y1="24" x2="24" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/><stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="#dc2743" stroke="none"/></svg>`; })() },
-    { title: 'Search Twitter/X',    href: `https://twitter.com/search?q=${q}`,
+    { title: 'Search Twitter/X',  href: `https://twitter.com/search?q=${q}`,
       svg: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>` },
+    // ── Social — content-focused ──────────────────────────────────────────────
+    { title: 'Search TikTok',     href: `https://www.tiktok.com/search?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 3.4A4.8 4.8 0 0115 0h-3v16.5a2.5 2.5 0 01-2.5 2 2.5 2.5 0 01-2.5-2.5 2.5 2.5 0 012.5-2.5c.3 0 .5 0 .7.1V10a6.5 6.5 0 00-.7 0 6 6 0 00-6 6 6 6 0 006 6 6 6 0 006-6V8.2a8 8 0 004.6 1.5V6.5a4.8 4.8 0 01-2.5-.9 4.8 4.8 0 01-3-2.2z"/><path fill="#69C9D0" d="M17.1 5.6A4.8 4.8 0 0115 0h-1a5.8 5.8 0 003.1 5.6z" opacity=".8"/></svg>` },
+    { title: 'Search YouTube',    href: `https://www.youtube.com/results?search_query=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.5 6.2s-.2-1.6-1-2.3c-.9-1-1.9-1-2.4-1C17.6 2.8 12 2.8 12 2.8s-5.6 0-8.1.1c-.5.1-1.5.1-2.4 1-.7.7-1 2.3-1 2.3S.3 8 .3 9.8v1.7c0 1.8.2 3.5.2 3.5s.2 1.6 1 2.3c.9 1 2.1.9 2.7 1 1.9.2 8.3.2 8.3.2s5.6 0 8.1-.1c.5-.1 1.5-.1 2.4-1 .7-.7 1-2.3 1-2.3s.2-1.7.2-3.5V9.8c-.1-1.8-.2-3.6-.2-3.6zM9.7 14.8V8.4l6.6 3.2-6.6 3.2z"/></svg>` },
+    { title: 'Search Reddit',     href: `https://www.reddit.com/search/?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#FF4500"><circle cx="12" cy="12" r="10"/><path fill="white" d="M20 12a2 2 0 00-2-2 2 2 0 00-1.3.5C15.4 9.7 14 9.2 12.5 9.1l.7-3.2 2.2.5a1.5 1.5 0 103-0.1 1.5 1.5 0 00-2.8.4l-2.5-.5c-.2 0-.3.1-.3.2l-.8 3.6C10 10.1 8.5 10.6 7.3 11.5A2 2 0 004 12a2 2 0 00.9 1.7 3.5 3.5 0 000 .5c0 2.5 2.7 4.5 6.1 4.5s6.1-2 6.1-4.5c0-.2 0-.3 0-.5A2 2 0 0020 12zm-10 2a1 1 0 111-1 1 1 0 01-1 1zm5.5 2.5c-.6.6-1.7.9-3.5.9s-2.9-.3-3.5-.9a.3.3 0 01.5-.5c.5.5 1.4.7 3 .7s2.5-.2 3-.7a.3.3 0 01.5.5zm-.5-1.5a1 1 0 111-1 1 1 0 01-1 1z"/></svg>` },
     { title: 'Search Truth Social', href: `https://truthsocial.com/search?q=${q}`,
       svg: `<svg viewBox="0 0 24 24" fill="#E1241A"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/><path d="M9 9h6v2H9zm0 4h6v2H9z"/></svg>` },
-    { title: 'Search YouTube',      href: `https://www.youtube.com/results?search_query=${q}`,
-      svg: `<svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.5 6.2s-.2-1.6-1-2.3c-.9-1-1.9-1-2.4-1C17.6 2.8 12 2.8 12 2.8s-5.6 0-8.1.1c-.5.1-1.5.1-2.4 1-.7.7-1 2.3-1 2.3S.3 8 .3 9.8v1.7c0 1.8.2 3.5.2 3.5s.2 1.6 1 2.3c.9 1 2.1.9 2.7 1 1.9.2 8.3.2 8.3.2s5.6 0 8.1-.1c.5-.1 1.5-.1 2.4-1 .7-.7 1-2.3 1-2.3s.2-1.7.2-3.5V9.8c-.1-1.8-.2-3.6-.2-3.6zM9.7 14.8V8.4l6.6 3.2-6.6 3.2z"/></svg>` },
-    { title: 'Search Reddit',       href: `https://www.reddit.com/search/?q=${q}`,
-      svg: `<svg viewBox="0 0 24 24" fill="#FF4500"><circle cx="12" cy="12" r="10"/><path fill="white" d="M20 12a2 2 0 00-2-2 2 2 0 00-1.3.5C15.4 9.7 14 9.2 12.5 9.1l.7-3.2 2.2.5a1.5 1.5 0 103-0.1 1.5 1.5 0 00-2.8.4l-2.5-.5c-.2 0-.3.1-.3.2l-.8 3.6C10 10.1 8.5 10.6 7.3 11.5A2 2 0 004 12a2 2 0 00.9 1.7 3.5 3.5 0 000 .5c0 2.5 2.7 4.5 6.1 4.5s6.1-2 6.1-4.5c0-.2 0-.3 0-.5A2 2 0 0020 12zm-10 2a1 1 0 111-1 1 1 0 01-1 1zm5.5 2.5c-.6.6-1.7.9-3.5.9s-2.9-.3-3.5-.9a.3.3 0 01.5-.5c.5.5 1.4.7 3 .7s2.5-.2 3-.7a.3.3 0 01.5.5zm-.5-1.5a1 1 0 111-1 1 1 0 01-1 1z"/></svg>` },
-    { title: 'Search TikTok',       href: `https://www.tiktok.com/search?q=${q}`,
-      svg: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 3.4A4.8 4.8 0 0115 0h-3v16.5a2.5 2.5 0 01-2.5 2 2.5 2.5 0 01-2.5-2.5 2.5 2.5 0 012.5-2.5c.3 0 .5 0 .7.1V10a6.5 6.5 0 00-.7 0 6 6 0 00-6 6 6 6 0 006 6 6 6 0 006-6V8.2a8 8 0 004.6 1.5V6.5a4.8 4.8 0 01-2.5-.9 4.8 4.8 0 01-3-2.2z"/><path fill="#69C9D0" d="M17.1 5.6A4.8 4.8 0 0115 0h-1a5.8 5.8 0 003.1 5.6z" opacity=".8"/></svg>` },
-    { title: 'Search WhatsApp',     href: `https://wa.me/?text=${q}`,
+    // ── Messaging ─────────────────────────────────────────────────────────────
+    { title: 'Search Telegram',   href: `https://t.me/search?query=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#26A5E4"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 13.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.942z"/></svg>` },
+    { title: 'Search WhatsApp',   href: `https://wa.me/?text=${q}`,
       svg: `<svg viewBox="0 0 24 24" fill="#25D366"><path d="M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.3-1.6A12 12 0 0012 24c6.6 0 12-5.4 12-12S18.6 0 12 0zm6.2 16.8c-.3.8-1.4 1.5-2 1.6-.5.1-1.1.1-1.7-.1-.4-.1-.9-.3-1.5-.6-2.6-1.1-4.3-3.7-4.5-3.9-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.5c-.1.1-.2.3-.1.5.3.5.8 1.2 1.4 1.7.7.6 1.3.9 1.6 1 .2.1.4.1.5-.1l.5-.6c.2-.2.3-.2.5-.1l2 .9c.2.1.3.2.3.4v.1z"/></svg>` },
-    { title: 'Search LinkedIn',     href: `https://www.linkedin.com/search/results/people/?keywords=${q}`,
-      svg: `<svg viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.4 2H3.6A1.6 1.6 0 002 3.6v16.8A1.6 1.6 0 003.6 22h16.8a1.6 1.6 0 001.6-1.6V3.6A1.6 1.6 0 0020.4 2zM8 19H5.5V10H8v9zM6.7 8.7A1.5 1.5 0 115.2 7.2a1.5 1.5 0 011.5 1.5zm12.3 10.3h-2.5v-4.4c0-1 0-2.4-1.4-2.4s-1.6 1.1-1.6 2.3V19H11V10h2.4v1.2h.1a2.7 2.7 0 012.4-1.3c2.5 0 3 1.7 3 3.8v5.3z"/></svg>` },
-    { title: 'Search InmateAid',    href: `https://www.inmateaid.com/search?category=All&q=${q}`,
+    // ── Inmate-specific ───────────────────────────────────────────────────────
+    { title: 'Search InmateAid',  href: `https://www.inmateaid.com/search?category=All&q=${q}`,
       svg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9"/><path d="M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3.6" y1="8" x2="20.4" y2="8"/><line x1="3.6" y1="16" x2="20.4" y2="16"/></svg>` },
   ];
 
@@ -871,12 +870,9 @@ async function loadWarrants() {
   document.getElementById('cnt-warrants').textContent = names.length;
   meta.textContent = titleText + ' — ' + names.length + ' names';
 
-  // Store for filtering
   window._warrantNames = names;
-
   renderWarrants(names);
 
-  // Wire up filter input (once)
   const input = document.getElementById('warrants-search');
   input.addEventListener('input', () => {
     const q = input.value.toLowerCase();
@@ -885,22 +881,17 @@ async function loadWarrants() {
   });
 }
 
+// Fix #2: strict LAST, FIRST [MIDDLE] pattern replaces loose heuristic checks
 function parseWarrantHTML(html) {
-  const doc   = new DOMParser().parseFromString(html, 'text/html');
+  const doc       = new DOMParser().parseFromString(html, 'text/html');
   const titleEl   = doc.querySelector('h1');
   const titleText = titleEl ? titleEl.textContent.trim() : 'Arrest Warrants';
+  const nameRe    = /^[A-Za-z][A-Za-z\-'. ]+,\s*[A-Za-z][A-Za-z\-'.]*(?:\s+[A-Za-z0-9][A-Za-z\-'.0-9]*){0,3}$/;
   const names = [], seen = new Set();
   const scope = doc.querySelector('#main-content, main, article, .field-item, .page-content, #content') || doc.body;
   scope.querySelectorAll('li').forEach(li => {
     const text = li.textContent.trim();
-    if (
-      text.length > 2 && text.length < 80 &&
-      !text.startsWith('http') &&
-      !/^[A-Z]$/.test(text) &&
-      !/select.*language/i.test(text) &&
-      !/accessibility|contact|facebook|instagram|twitter|youtube|privacy/i.test(text) &&
-      !seen.has(text)
-    ) { seen.add(text); names.push(text); }
+    if (nameRe.test(text) && !seen.has(text)) { seen.add(text); names.push(text); }
   });
   return { titleText, names };
 }
@@ -918,15 +909,12 @@ document.getElementById('warrant-file-input').addEventListener('change', functio
     document.getElementById('cnt-warrants').textContent = names.length;
     document.getElementById('warrants-meta').textContent = titleText + ' (local file) — ' + names.length + ' names';
     renderWarrants(names);
-    // Ensure search input is wired (re-wire is safe — old listener still works)
   };
   reader.readAsText(file);
 });
 
 function renderWarrants(names) {
   document.getElementById('warrants-list').innerHTML = names.map(name => {
-    // Convert name to parseable format — warrants list is "Last, First Middle" or "LAST, FIRST"
-    // Use same parseName() helper already defined
     const icons = searchIcons(name);
     return `<div class="warrant-row">
       <span class="warrant-name">${name}</span>
@@ -1007,16 +995,14 @@ function renderCounties() {
 document.getElementById('pdf-file-input').addEventListener('change', async function () {
   const file = this.files[0];
   if (!file) return;
-  this.value = ''; // reset so same file can be re-selected
+  this.value = '';
 
-  // Show loading overlay
   document.getElementById('app').classList.remove('visible');
   document.getElementById('loading-overlay').style.display = 'flex';
   setProgress('Reading ' + file.name + '…');
 
   try {
-    const blob = file.slice(); // copy as blob
-    // Save to cache
+    const blob = file.slice();
     let db;
     try { db = await openDB(); await putCached(db, blob); } catch { /* non-fatal */ }
 
