@@ -795,6 +795,1029 @@ function searchIcons(full) {
       svg: `<svg viewBox="0 0 24 24" fill="#FC3F1D"><path d="M14.993 0H12.27C8.274 0 6.01 2.04 6.01 5.388c0 2.774 1.29 4.428 3.93 6.252L6 18.967V19h3.46l4.206-7.938-.93-.618C10.627 8.88 9.75 7.67 9.75 5.28c0-1.986 1.23-3.11 3.41-3.11h1.47V19H17.9V0h-2.907z"/></svg>` },
     // ── Social — identity-focused ─────────────────────────────────────────────
     { title: 'Search Facebook',   href: `https://www.facebook.com/search/people/?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>` },
+    { title: 'Search LinkedIn',   href: `https://www.linkedin.com/search/results/people/?keywords=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.4 2H3.6A1.6 1.6 0 002 3.6v16.8A1.6 1.6 0 003.6 22h16.8a1.6 1.6 0 001.6-1.6V3.6A1.6 1.6 0 0020.4 2zM8 19H5.5V10H8v9zM6.7 8.7A1.5 1.5 0 115.2 7.2a1.5 1.5 0 011.5 1.5zm12.3 10.3h-2.5v-4.4c0-1 0-2.4-1.4-2.4s-1.6 1.1-1.6 2.3V19H11V10h2.4v1.2h.1a2.7 2.7 0 012.4-1.3c2.5 0 3 1.7 3 3.8v5.3z"/></svg>` },
+    { title: 'Search Instagram',  href: `https://www.instagram.com/explore/search/keyword/?q=${q}`,
+      svg: (() => { const id='ig-'+Math.random().toString(36).slice(2,7); return `<svg viewBox="0 0 24 24" fill="none" stroke="url(#${id})" stroke-width="1.8"><defs><linearGradient id="${id}" x1="0" y1="24" x2="24" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#f09433"/><stop offset="25%" stop-color="#e6683c"/><stop offset="50%" stop-color="#dc2743"/><stop offset="75%" stop-color="#cc2366"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="#dc2743" stroke="none"/></svg>`; })() },
+    { title: 'Search Twitter/X',  href: `https://twitter.com/search?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>` },
+    // ── Social — content-focused ──────────────────────────────────────────────
+    { title: 'Search TikTok',     href: `https://www.tiktok.com/search?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#ffffff"><path d="M19.6 3.4A4.8 4.8 0 0115 0h-3v16.5a2.5 2.5 0 01-2.5 2 2.5 2.5 0 01-2.5-2.5 2.5 2.5 0 012.5-2.5c.3 0 .5 0 .7.1V10a6.5 6.5 0 00-.7 0 6 6 0 00-6 6 6 6 0 006 6 6 6 0 006-6V8.2a8 8 0 004.6 1.5V6.5a4.8 4.8 0 01-2.5-.9 4.8 4.8 0 01-3-2.2z"/><path fill="#69C9D0" d="M17.1 5.6A4.8 4.8 0 0115 0h-1a5.8 5.8 0 003.1 5.6z" opacity=".8"/></svg>` },
+    { title: 'Search YouTube',    href: `https://www.youtube.com/results?search_query=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.5 6.2s-.2-1.6-1-2.3c-.9-1-1.9-1-2.4-1C17.6 2.8 12 2.8 12 2.8s-5.6 0-8.1.1c-.5.1-1.5.1-2.4 1-.7.7-1 2.3-1 2.3S.3 8 .3 9.8v1.7c0 1.8.2 3.5.2 3.5s.2 1.6 1 2.3c.9 1 2.1.9 2.7 1 1.9.2 8.3.2 8.3.2s5.6 0 8.1-.1c.5-.1 1.5-.1 2.4-1 .7-.7 1-2.3 1-2.3s.2-1.7.2-3.5V9.8c-.1-1.8-.2-3.6-.2-3.6zM9.7 14.8V8.4l6.6 3.2-6.6 3.2z"/></svg>` },
+    { title: 'Search Reddit',     href: `https://www.reddit.com/search/?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#FF4500"><circle cx="12" cy="12" r="10"/><path fill="white" d="M20 12a2 2 0 00-2-2 2 2 0 00-1.3.5C15.4 9.7 14 9.2 12.5 9.1l.7-3.2 2.2.5a1.5 1.5 0 103-0.1 1.5 1.5 0 00-2.8.4l-2.5-.5c-.2 0-.3.1-.3.2l-.8 3.6C10 10.1 8.5 10.6 7.3 11.5A2 2 0 004 12a2 2 0 00.9 1.7 3.5 3.5 0 000 .5c0 2.5 2.7 4.5 6.1 4.5s6.1-2 6.1-4.5c0-.2 0-.3 0-.5A2 2 0 0020 12zm-10 2a1 1 0 111-1 1 1 0 01-1 1zm5.5 2.5c-.6.6-1.7.9-3.5.9s-2.9-.3-3.5-.9a.3.3 0 01.5-.5c.5.5 1.4.7 3 .7s2.5-.2 3-.7a.3.3 0 01.5.5zm-.5-1.5a1 1 0 111-1 1 1 0 01-1 1z"/></svg>` },
+    { title: 'Search Truth Social', href: `https://truthsocial.com/search?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#E1241A"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/><path d="M9 9h6v2H9zm0 4h6v2H9z"/></svg>` },
+    // ── Messaging ─────────────────────────────────────────────────────────────
+    { title: 'Search Telegram',   href: `https://t.me/search?query=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#26A5E4"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 13.617l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.942z"/></svg>` },
+    { title: 'Search WhatsApp',   href: `https://wa.me/?text=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#25D366"><path d="M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.3-1.6A12 12 0 0012 24c6.6 0 12-5.4 12-12S18.6 0 12 0zm6.2 16.8c-.3.8-1.4 1.5-2 1.6-.5.1-1.1.1-1.7-.1-.4-.1-.9-.3-1.5-.6-2.6-1.1-4.3-3.7-4.5-3.9-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.5c-.1.1-.2.3-.1.5.3.5.8 1.2 1.4 1.7.7.6 1.3.9 1.6 1 .2.1.4.1.5-.1l.5-.6c.2-.2.3-.2.5-.1l2 .9c.2.1.3.2.3.4v.1z"/></svg>` },
+    // ── Inmate-specific ───────────────────────────────────────────────────────
+    { title: 'Search InmateAid',  href: `https://www.inmateaid.com/search?category=All&q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="none" stroke="#e8e6e1" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9"/><path d="M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3.6" y1="8" x2="20.4" y2="8"/><line x1="3.6" y1="16" x2="20.4" y2="16"/></svg>` },
+  ];
+
+  return icons.map(ic =>
+    `<a class="search-icon" title="${ic.title}" href="${ic.href}" target="_blank" rel="noopener">${ic.svg}</a>`
+  ).join('');
+}
+
+// ── UI helpers ────────────────────────────────────────────────────────────────
+function setProgress(msg) { document.getElementById('load-progress').textContent = msg; }
+
+function showError(msg) {
+  document.getElementById('loading-overlay').style.display = 'none';
+  const el = document.getElementById('error-banner');
+  el.innerHTML = '⚠ ' + msg;
+  el.style.display = 'block';
+  document.getElementById('app').classList.add('visible');
+}
+
+// ── Arrest Warrants ──────────────────────────────────────────────────────────
+let warrantsLoaded = false;
+
+async function loadWarrants() {
+  if (warrantsLoaded) return;
+  const meta = document.getElementById('warrants-meta');
+  const list = document.getElementById('warrants-list');
+  meta.textContent = 'Loading warrant list…';
+  list.innerHTML = '';
+
+  const WARRANTS_URL = 'https://www.helenamt.gov/Departments/Municipal-Court/Arrest-Warrants-List';
+  let html;
+  try {
+    const res = await fetch(PROXY + encodeURIComponent(WARRANTS_URL));
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    html = await res.text();
+  } catch (e) {
+    try {
+      const res = await fetch(WARRANTS_URL);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      html = await res.text();
+    } catch (e2) {
+      meta.textContent = '⚠ Could not load warrant list: ' + e2.message;
+      return;
+    }
+  }
+
+  const { titleText, names } = parseWarrantHTML(html);
+
+  warrantsLoaded = true;
+  document.getElementById('cnt-warrants').textContent = names.length;
+  meta.textContent = titleText + ' — ' + names.length + ' names';
+
+  window._warrantNames = names;
+  renderWarrants(names);
+
+  const input = document.getElementById('warrants-search');
+  input.addEventListener('input', () => {
+    const q = input.value.toLowerCase();
+    const filtered = q ? window._warrantNames.filter(n => n.toLowerCase().includes(q)) : window._warrantNames;
+    renderWarrants(filtered);
+  });
+}
+
+// Fix #2: strict LAST, FIRST [MIDDLE] pattern replaces loose heuristic checks
+function parseWarrantHTML(html) {
+  const doc       = new DOMParser().parseFromString(html, 'text/html');
+  const titleEl   = doc.querySelector('h1');
+  const titleText = titleEl ? titleEl.textContent.trim() : 'Arrest Warrants';
+  const nameRe    = /^[A-Za-z][A-Za-z\-'. ]+,\s*[A-Za-z][A-Za-z\-'.]*(?:\s+[A-Za-z0-9][A-Za-z\-'.0-9]*){0,3}$/;
+  const names = [], seen = new Set();
+  const scope = doc.querySelector('#main-content, main, article, .field-item, .page-content, #content') || doc.body;
+  scope.querySelectorAll('li').forEach(li => {
+    const text = li.textContent.trim();
+    if (nameRe.test(text) && !seen.has(text)) { seen.add(text); names.push(text); }
+  });
+  return { titleText, names };
+}
+
+// ── Open local warrant HTML ───────────────────────────────────────────────────
+document.getElementById('warrant-file-input').addEventListener('change', function () {
+  const file = this.files[0];
+  if (!file) return;
+  this.value = '';
+  const reader = new FileReader();
+  reader.onload = e => {
+    const { titleText, names } = parseWarrantHTML(e.target.result);
+    warrantsLoaded = true;
+    window._warrantNames = names;
+    document.getElementById('cnt-warrants').textContent = names.length;
+    document.getElementById('warrants-meta').textContent = titleText + ' (local file) — ' + names.length + ' names';
+    renderWarrants(names);
+  };
+  reader.readAsText(file);
+});
+
+function renderWarrants(names) {
+  document.getElementById('warrants-list').innerHTML = names.map(name => {
+    const icons = searchIcons(name);
+    return `<div class="warrant-row">
+      <span class="warrant-name">${name}</span>
+      <span class="warrant-icons">${icons}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── County Websites ──────────────────────────────────────────────────────────
+const COUNTIES = [
+  ["Beaverhead County", "beaverheadcountymt.gov"],
+  ["Big Horn County", "bighorncountymt.gov"],
+  ["Blaine County", "blainecountymt.gov"],
+  ["Broadwater County", "broadwatercountymt.gov"],
+  ["Carbon County", "carboncountymt.gov"],
+  ["Carter County", "cartercountymt.gov"],
+  ["Cascade County", "cascadecountymt.gov"],
+  ["Chouteau County", "chouteaucountymt.gov"],
+  ["Custer County", "custercountymt.gov"],
+  ["Daniels County", "danielscountymt.gov"],
+  ["Dawson County", "dawsoncountymt.gov"],
+  ["Deer Lodge County", "co.deer-lodge.mt.us"],
+  ["Fallon County", "falloncountymt.gov"],
+  ["Fergus County", "ferguscountymt.gov"],
+  ["Flathead County", "flathead.mt.gov"],
+  ["Gallatin County", "gallatincomt.virtualtownhall.net"],
+  ["Garfield County", "garfieldcountymt.gov"],
+  ["Glacier County", "glaciercountymt.gov"],
+  ["Golden Valley County", "goldenvalleycountymt.gov"],
+  ["Granite County", "granitecountymt.gov"],
+  ["Hill County", "hillcounty.us"],
+  ["Jefferson County", "jeffersoncounty-mt.gov"],
+  ["Judith Basin County", "judithbasincountymt.gov"],
+  ["Lake County", "lakemt.gov"],
+  ["Lewis and Clark County", "lccountymt.gov"],
+  ["Liberty County", "libertycountymt.gov"],
+  ["Lincoln County", "lincolncountymt.us"],
+  ["Madison County", "madisoncountymt.gov"],
+  ["McCone County", "mcconecountymt.gov"],
+  ["Meagher County", "meaghercountymt.gov"],
+  ["Mineral County", "co.mineral.mt.us"],
+  ["Missoula County", "missoulacounty.us"],
+  ["Musselshell County", "musselshellcountymt.gov"],
+  ["Park County", "parkcounty.org"],
+  ["Petroleum County", "petroleumcountymt.gov"],
+  ["Phillips County", "phillipscountymt.gov"],
+  ["Pondera County", "ponderacountymt.gov"],
+  ["Powder River County", "powderrivercountymt.gov"],
+  ["Powell County", "powellcountymt.gov"],
+  ["Prairie County", "prairiecountymt.gov"],
+  ["Ravalli County", "ravalli.us"],
+  ["Richland County", "richland.org"],
+  ["Roosevelt County", "rooseveltcounty.org"],
+  ["Rosebud County", "rosebudcountymt.gov"],
+  ["Sanders County", "co.sanders.mt.us"],
+  ["Sheridan County", "sheridancountymt.gov"],
+  ["Silver Bow County", "co.silverbow.mt.us"],
+  ["Stillwater County", "stillwatercountymt.gov"],
+  ["Sweet Grass County", "sweetgrasscountygov.com"],
+  ["Teton County", "tetoncountymt.gov"],
+  ["Toole County", "toolecountymt.gov"],
+  ["Treasure County", "treasurecountymt.gov"],
+  ["Valley County", "valleycountymt.gov"],
+  ["Wheatland County", "wheatlandcountymt.gov"],
+  ["Wibaux County", "wibauxcountymt.gov"],
+  ["Yellowstone County", "yellowstonecountymt.gov"]
+];
+
+function renderCounties() {
+  document.getElementById('counties-grid').innerHTML =
+    COUNTIES.map(([name, domain]) =>
+      `<a class="county-link" href="https://${domain}" target="_blank" rel="noopener">` +
+      `${name}<span class="county-domain">${domain}</span></a>`
+    ).join('');
+}
+
+// ── Open local file ───────────────────────────────────────────────────────────
+document.getElementById('pdf-file-input').addEventListener('change', async function () {
+  const file = this.files[0];
+  if (!file) return;
+  this.value = '';
+
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('loading-overlay').style.display = 'flex';
+  setProgress('Reading ' + file.name + '…');
+
+  try {
+    const blob = file.slice();
+    let db;
+    try { db = await openDB(); await putCached(db, blob); } catch { /* non-fatal */ }
+
+    setProgress('Extracting text…');
+    const pdf  = await loadPDFFromBlob(blob);
+    const text = await extractText(pdf);
+    setProgress('Parsing records…');
+    const { inmates, printDate } = parseRoster(text);
+    initApp(inmates, printDate);
+  } catch (err) {
+    showError('Failed to load file: ' + err.message);
+  }
+});
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+loadRoster();
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JailbirdWEB</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0e0f11;
+    --surface:  #161719;
+    --border:   #2a2c30;
+    --text:     #e8e6e1;
+    --muted:    #6b6d72;
+    --accent:   #e8e6e1;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+
+  .open-file-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--muted);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 3px; padding: 3px 9px; cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .open-file-btn:hover { color: var(--text); border-color: var(--accent); }
+  .fmt-combo {
+    display: inline-flex; align-items: center;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 3px; overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .fmt-combo:focus-within { border-color: var(--accent); }
+  .fmt-combo-input {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.04em;
+    color: var(--text); background: transparent; border: none;
+    padding: 3px 6px; width: 100px; outline: none;
+  }
+  .fmt-combo-arrow {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    color: var(--muted); background: var(--surface);
+    border: none; border-left: 1px solid var(--border);
+    padding: 3px 4px; cursor: pointer; outline: none;
+    appearance: none; -webkit-appearance: none;
+  }
+  .fmt-combo-arrow:hover { color: var(--text); }
+  .fmt-combo-arrow option { background: #1a1b1e; color: var(--text); }
+  /* ── Loading ── */
+  #loading-overlay {
+    position: fixed; inset: 0; background: var(--bg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 100; gap: 16px;
+  }
+  .spinner {
+    width: 28px; height: 28px;
+    border: 2px solid var(--border); border-top-color: var(--accent);
+    border-radius: 50%; animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .load-label {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  }
+  #load-progress { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+
+  /* ── Error ── */
+  #error-banner {
+    display: none;
+    background: #2a1010; border: 1px solid #5a2020; color: #e89090;
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    padding: 14px 20px; border-radius: 4px; margin: 20px 40px; line-height: 1.7;
+  }
+
+  /* ── App ── */
+  #app { opacity: 0; transition: opacity 0.3s; }
+  #app.visible { opacity: 1; }
+
+  header { padding: 32px 40px 0; max-width: 1200px; margin: 0 auto; }
+  header h1 {
+    font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 400;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  header h2 { font-size: 22px; font-weight: 300; letter-spacing: -0.02em; }
+  header h2 span { font-weight: 500; }
+  .web-sup {
+    font-size: 0.45em;
+    font-variant: small-caps;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    vertical-align: super;
+    opacity: 0.7;
+  }
+
+  .meta-row { display: flex; align-items: center; gap: 16px; margin-top: 8px; flex-wrap: wrap; }
+  .meta-row > span { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  .count-badge {
+    background: var(--accent); color: #0e0f11; padding: 2px 8px;
+    border-radius: 2px; font-size: 10px; font-weight: 500; letter-spacing: 0.06em;
+  }
+
+  /* ── Search ── */
+  .search-bar { max-width: 1200px; margin: 24px auto 0; padding: 0 40px; }
+  .search-bar input {
+    width: 100%; max-width: 380px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 4px; padding: 8px 14px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text);
+    outline: none; transition: border-color 0.15s;
+  }
+  .search-bar input::placeholder { color: var(--muted); }
+  .search-bar input:focus { border-color: var(--accent); }
+
+  /* ── Tabs ── */
+  .tabs-wrapper {
+    max-width: 1200px; margin: 24px auto 0; padding: 0 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tabs { display: flex; overflow-x: auto; }
+  .tab {
+    font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; font-weight: 400; padding: 10px 18px;
+    cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent;
+    margin-bottom: -1px; transition: color 0.15s; white-space: nowrap;
+    user-select: none; background: none; border-top: none; border-left: none; border-right: none;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+  .tab-count {
+    display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px;
+    background: var(--border); color: var(--muted);
+    padding: 1px 5px; border-radius: 2px; margin-left: 5px;
+  }
+  .tab.active .tab-count { background: rgba(232,230,225,0.12); color: var(--text); }
+
+  /* ── Content ── */
+  .content { max-width: 1200px; margin: 0 auto; padding: 28px 40px 60px; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── Overview stats ── */
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px; margin-bottom: 32px;
+  }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 18px 20px;
+  }
+  .stat-card .label {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  .stat-card .value { font-size: 28px; font-weight: 300; letter-spacing: -0.03em; }
+
+  .charge-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .breakdown-section {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 20px;
+  }
+  .breakdown-section h3 {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+  }
+  .breakdown-row {
+    display: flex; align-items: center;
+    padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+  }
+  .breakdown-row:last-child { border-bottom: none; }
+  .bar-wrap { flex: 1; margin: 0 12px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .bar { height: 100%; background: var(--accent); border-radius: 2px; }
+  .num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); min-width: 24px; text-align: right; }
+
+  /* ── Table ── */
+  .roster-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .roster-table thead th {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); text-align: left;
+    padding: 8px 14px; border-bottom: 1px solid var(--border);
+    white-space: nowrap; font-weight: 400; cursor: pointer; user-select: none;
+  }
+  .roster-table thead th:hover { color: var(--text); }
+  .roster-table thead th.sorted { color: var(--text); }
+  .roster-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  .roster-table tbody tr:hover { background: rgba(232,230,225,0.04); }
+  .roster-table tbody td { padding: 10px 14px; vertical-align: middle; }
+
+  .name-cell  { font-weight: 500; white-space: nowrap; }
+  .age-cell   { font-family: 'DM Mono', monospace; font-size: 12px; text-align: center; }
+  .date-cell  { font-family: 'DM Mono', monospace; font-size: 11px; white-space: nowrap; }
+  .elapsed-cell { font-family: 'DM Mono', monospace; font-size: 11px; white-space: nowrap; color: var(--muted); }
+  .booking-num  { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+
+  .sex-badge {
+    display: inline-block; font-family: 'DM Mono', monospace; font-size: 9px;
+    letter-spacing: 0.06em; padding: 2px 6px; border-radius: 2px;
+    background: var(--border); color: var(--muted); text-transform: uppercase;
+  }
+
+  .no-results {
+    text-align: center; padding: 60px 20px; color: var(--muted);
+    font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.06em;
+  }
+
+  /* ── Search icons ── */
+  .search-cell { white-space: nowrap; }
+  .search-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; margin-right: 3px;
+    border-radius: 3px; color: var(--muted);
+    opacity: 0.55; transition: opacity 0.15s, transform 0.1s;
+    vertical-align: middle; text-decoration: none;
+  }
+  .search-icon:hover { opacity: 1; transform: scale(1.15); }
+  .search-icon svg { width: 14px; height: 14px; display: block; }
+
+
+  /* ── County Websites ── */
+  .counties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px;
+  }
+  .county-link {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .county-link:hover {
+    border-color: var(--accent);
+    background: rgba(232,230,225,0.05);
+  }
+  .county-link .county-domain {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+
+  /* ── Links ── */
+  .links-list { display: flex; flex-direction: column; gap: 8px; max-width: 480px; }
+  .link-item {
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 4px; padding: 12px 16px;
+    color: var(--text); text-decoration: none; font-size: 13px; font-weight: 500;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .link-item:hover { border-color: var(--accent); background: rgba(232,230,225,0.05); }
+  .link-url {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    color: var(--muted); font-weight: 400;
+  }
+  /* ── Arrest Warrants ── */
+  .warrant-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+  }
+  .warrant-row:last-child { border-bottom: none; }
+  .warrant-name { font-weight: 500; }
+  .warrant-icons { white-space: nowrap; flex-shrink: 0; margin-left: 12px; }
+  @media (max-width: 700px) {
+    header, .search-bar, .tabs-wrapper, .content { padding-left: 16px; padding-right: 16px; }
+    .charge-breakdown { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div class="load-label">Loading roster from PDF…</div>
+  <div id="load-progress"></div>
+</div>
+
+<div id="error-banner"></div>
+
+<div id="app">
+  <header>
+    <h1>Lewis and Clark County / City of Helena</h1>
+    <h2>Jailbird<sup class="web-sup">WEB</sup></h2>
+    <div class="meta-row">
+      <span id="print-date">Loading…</span>
+      <span class="count-badge" id="total-badge">—</span>
+      <span style="opacity:.6">lccountymt.gov/sheriff</span>
+      <button class="open-file-btn" onclick="document.getElementById('pdf-file-input').click()" title="Load roster PDF from disk">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="13" height="13"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+        Open Roster PDF
+      </button>
+      <input type="file" id="pdf-file-input" accept=".pdf,application/pdf" style="display:none">
+      <span class="fmt-combo" title="Search query format — pick a preset or type your own (tokens: first, last)">
+        <input id="fmt-input" class="fmt-combo-input" value="first+last"
+               oninput="onFmtChange()" autocomplete="off" spellcheck="false" placeholder="format…">
+        <select id="fmt-preset" class="fmt-combo-arrow" onchange="onFmtPreset()" title="Pick a preset">
+          <option value="">▾</option>
+          <option value="first+last">first+last</option>
+          <option value="last+first">last+first</option>
+          <option value="first%20last">first%20last</option>
+          <option value="last%20first">last%20first</option>
+          <option value="last%2Cfirst">last%2Cfirst</option>
+          <option value="first%2Clast">first%2Clast</option>
+          <option value="&quot;first last&quot;">"first last"</option>
+          <option value="&quot;last first&quot;">"last first"</option>
+        </select>
+      </span>
+    </div>
+  </header>
+
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search by name, charge, booking #…" autocomplete="off">
+  </div>
+
+  <div class="tabs-wrapper">
+    <div class="tabs">
+      <button class="tab active" data-tab="all">All <span class="tab-count" id="cnt-all">—</span></button>
+      <button class="tab" data-tab="stats">Overview</button>
+      <button class="tab" data-tab="counties">County Websites</button>
+      <button class="tab" data-tab="warrants">Arrest Warrants <span class="tab-count" id="cnt-warrants">—</span></button>
+      <button class="tab" data-tab="links">Links</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div id="panel-all" class="panel active">
+      <table class="roster-table"><thead></thead><tbody></tbody></table>
+      <div class="no-results" style="display:none">No matching records</div>
+    </div>
+    <div id="panel-stats" class="panel">
+      <div class="stats-grid" id="stats-grid"></div>
+      <div class="charge-breakdown">
+        <div class="breakdown-section"><h3>Hold Type Breakdown</h3><div id="hold-breakdown"></div></div>
+        <div class="breakdown-section"><h3>Top Charge Categories</h3><div id="charge-breakdown"></div></div>
+      </div>
+    </div>
+    <div id="panel-counties" class="panel">
+      <div class="counties-grid" id="counties-grid"></div>
+    </div>
+    <div id="panel-links" class="panel">
+      <div class="links-list">
+        <a class="link-item" href="https://www.helenamt.gov/Departments/Municipal-Court/Arrest-Warrants-List" target="_blank" rel="noopener">Arrest Warrants<span class="link-url">helenamt.gov</span></a>
+        <a class="link-item" href="https://www.lccountymt.gov/files/assets/county/v/0001/sheriff/documents/jail-roster.pdf" target="_blank" rel="noopener">Inmate Roster PDF<span class="link-url">lccountymt.gov</span></a>
+      </div>
+    </div>
+    <div id="panel-warrants" class="panel">
+      <div style="margin-bottom:14px;">
+        <button class="open-file-btn" onclick="document.getElementById('warrant-file-input').click()" title="Load warrant list from local HTML file">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="13" height="13"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+          Open Warrant HTML
+        </button>
+        <input type="file" id="warrant-file-input" accept=".html,.htm,text/html" style="display:none">
+      </div>
+      <div id="warrants-meta" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:18px;"></div>
+      <div id="warrants-search-bar" style="margin-bottom:18px;">
+        <input type="text" id="warrants-search" placeholder="Filter by name…" autocomplete="off"
+          style="width:100%;max-width:380px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:8px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color 0.15s;">
+      </div>
+      <div id="warrants-list"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Config ────────────────────────────────────────────────────────────────────
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const PDF_URL = 'https://www.lccountymt.gov/files/assets/county/v/183/sheriff/documents/pinmates.pdf';
+const PROXY   = 'https://corsproxy.io/?';
+
+// ── Search format ─────────────────────────────────────────────────────────────
+let searchFmt = 'first+last'; // default
+
+function buildQuery(first, last) {
+  const fmt = searchFmt || 'first+last';
+
+  const presets = {
+    'first+last':   () => encodeURIComponent(first) + '+'   + encodeURIComponent(last),
+    'last+first':   () => encodeURIComponent(last)  + '+'   + encodeURIComponent(first),
+    'first%20last': () => encodeURIComponent(first) + '%20' + encodeURIComponent(last),
+    'last%20first': () => encodeURIComponent(last)  + '%20' + encodeURIComponent(first),
+    'last%2Cfirst': () => encodeURIComponent(last)  + '%2C' + encodeURIComponent(first),
+    'first%2Clast': () => encodeURIComponent(first) + '%2C' + encodeURIComponent(last),
+    '"first last"': () => encodeURIComponent('"' + first + ' ' + last + '"'),
+    '"last first"': () => encodeURIComponent('"' + last  + ' ' + first + '"'),
+  };
+  if (presets[fmt]) return presets[fmt]();
+
+  // Fix #4: use word boundaries so tokens like "lastname" aren't partially matched
+  return fmt
+    .replace(/\bfirst\b/g, encodeURIComponent(first))
+    .replace(/\blast\b/g,  encodeURIComponent(last));
+}
+
+function onFmtChange() {
+  searchFmt = document.getElementById('fmt-input').value.trim();
+  if (currentFilter === 'all') renderAll();
+  else if (currentFilter === 'warrants' && typeof window._warrantNames !== 'undefined') renderWarrants(window._warrantNames);
+}
+
+function onFmtPreset() {
+  const sel = document.getElementById('fmt-preset');
+  if (!sel.value) return;
+  document.getElementById('fmt-input').value = sel.value;
+  sel.value = '';
+  onFmtChange();
+}
+
+// ── IndexedDB cache ───────────────────────────────────────────────────────────
+const DB_NAME   = 'jail-roster-cache';
+const DB_VER    = 1;
+const IDB_STORE = 'pdf';
+const CACHE_KEY = 'pinmates';
+const CACHE_TTL = 60 * 60 * 1000; // 1 hour
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VER);
+    req.onupgradeneeded = e => e.target.result.createObjectStore(IDB_STORE, { keyPath: 'key' });
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+function getCached(db) {
+  return new Promise((resolve, reject) => {
+    const req = db.transaction(IDB_STORE, 'readonly').objectStore(IDB_STORE).get(CACHE_KEY);
+    req.onsuccess = e => resolve(e.target.result || null);
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+function putCached(db, blob) {
+  return new Promise((resolve, reject) => {
+    const req = db.transaction(IDB_STORE, 'readwrite').objectStore(IDB_STORE).put({ key: CACHE_KEY, blob, ts: Date.now() });
+    req.onsuccess = () => resolve();
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+function xhrBlob(url) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'blob';
+    xhr.onload  = () => xhr.status === 200 ? resolve(xhr.response) : reject(new Error('HTTP ' + xhr.status));
+    xhr.onerror = () => reject(new Error('XHR network error'));
+    xhr.send();
+  });
+}
+
+async function fetchBlob() {
+  const attempts = [
+    { label: 'Downloading PDF (XHR)…',          fn: () => xhrBlob(PDF_URL) },
+    { label: 'Downloading PDF…',                 fn: () => fetch(PDF_URL).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); }) },
+    { label: 'Retrying via CORS proxy (XHR)…',  fn: () => xhrBlob(PROXY + encodeURIComponent(PDF_URL)) },
+    { label: 'Retrying via CORS proxy…',         fn: () => fetch(PROXY + encodeURIComponent(PDF_URL)).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); }) },
+  ];
+  for (const { label, fn } of attempts) {
+    try { setProgress(label); return await fn(); } catch { /* try next */ }
+  }
+  throw new Error('All fetch attempts failed.');
+}
+
+async function loadPDFFromBlob(blob) {
+  const ab = await blob.arrayBuffer();
+  return pdfjsLib.getDocument({ data: new Uint8Array(ab), cMapPacked: true }).promise;
+}
+
+// ── PDF text extraction ───────────────────────────────────────────────────────
+async function extractText(pdf) {
+  let text = '';
+  for (let p = 1; p <= pdf.numPages; p++) {
+    setProgress(`Parsing page ${p} of ${pdf.numPages}…`);
+    const page = await pdf.getPage(p);
+    const tc   = await page.getTextContent();
+    const sorted = [...tc.items].sort((a, b) => {
+      const dy = b.transform[5] - a.transform[5];
+      return Math.abs(dy) > 2 ? dy : a.transform[4] - b.transform[4];
+    });
+    let lastY = null;
+    for (const item of sorted) {
+      const y = Math.round(item.transform[5]);
+      if (lastY !== null && Math.abs(y - lastY) > 2) text += '\n';
+      text += item.str + ' ';
+      lastY = y;
+    }
+    text += '\n';
+  }
+  return text;
+}
+
+// ── Roster loader ─────────────────────────────────────────────────────────────
+function fmtAge(ms) {
+  if (ms < 60000) return Math.round(ms / 1000) + 's';
+  if (ms < 3600000) return Math.round(ms / 60000) + 'm';
+  return Math.round(ms / 3600000) + 'h';
+}
+
+async function loadRoster() {
+  let db, cached, blob;
+
+  try { db = await openDB(); cached = await getCached(db); } catch { /* IDB unavailable */ }
+
+  const age     = cached ? Date.now() - cached.ts : Infinity;
+  const expired = age > CACHE_TTL;
+
+  if (cached && !expired) {
+    setProgress(`Loading from local cache (${fmtAge(age)} old)…`);
+    blob = cached.blob;
+  } else {
+    if (cached) setProgress(`Cache is ${fmtAge(age)} old — refreshing…`);
+    try {
+      blob = await fetchBlob();
+      if (db) try { await putCached(db, blob); } catch { /* non-fatal */ }
+    } catch (err) {
+      if (cached) {
+        setProgress(`Network error — using stale cache (${fmtAge(age)} old)…`);
+        blob = cached.blob;
+      } else {
+        initApp([], '', 'Could not load the PDF and no cached copy exists. Check your network or use <b>Open Roster PDF</b> to load a local file.<br><br><b>Error:</b> ' + err.message);
+        return;
+      }
+    }
+  }
+
+  setProgress('Extracting text…');
+  let pdf;
+  try { pdf = await loadPDFFromBlob(blob); }
+  catch (err) { initApp([], '', 'Failed to parse PDF: ' + err.message); return; }
+
+  setProgress('Parsing records…');
+  const text = await extractText(pdf);
+  const { inmates, printDate } = parseRoster(text);
+  initApp(inmates, printDate);
+}
+
+// ── Parser ────────────────────────────────────────────────────────────────────
+// Fix #1: name group requires LAST, FIRST (comma mandatory); lookahead updated to match.
+// Removed post-match state/county bleed cleanup — the strict comma format makes it unnecessary.
+function parseRoster(text) {
+  const dateMatch = text.match(/Printed on ([A-Za-z]+ \d{1,2},\s*\d{4})/);
+  const printDate = dateMatch ? dateMatch[1] : '';
+
+  text = text
+    .replace(/Page \d+ of \d+/g, '')
+    .replace(/Jail Roster Printed on[^\n]*/g, '')
+    .replace(/Name\s+Age\s+Sex\s+Booking Date[^\n]*/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const inmates = [];
+  const re = /([A-Z][A-Z\-']{0,29},\s*[A-Z][A-Z\-']{0,29})\s+(\d{1,3})\s+(Male|Female)\s+(\d{2}\/\d{2}\/\d{2,4}\s+\d{2}:\d{2})\s+([\d]{2}-[\d]{4,6})\s+(.*?)(?=(?:[A-Z][A-Z\-']{0,29},\s*[A-Z].*?\s+\d{1,3}\s+(?:Male|Female))|$)/g;
+
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const age = parseInt(m[2], 10);
+    if (age < 1 || age > 110) continue;
+    const name = m[1].replace(/\s+/g, ' ').trim();
+    inmates.push({ name, age, sex: m[3], booking: m[4].trim(), num: m[5].trim(), holds: m[6].replace(/\s+/g, ' ').trim() });
+  }
+
+  return { inmates, printDate };
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let RAW          = [];
+let currentFilter = 'all';
+let searchQuery   = '';
+let sortField     = 'name';
+let sortDir       = 1;
+
+// ── App init ──────────────────────────────────────────────────────────────────
+function initApp(inmates, printDate, pdfError) {
+  RAW = inmates;
+  document.getElementById('print-date').textContent = printDate ? 'Printed ' + printDate : 'Current roster';
+  document.getElementById('total-badge').textContent = inmates.length ? inmates.length + ' INMATES' : '—';
+  renderAll(pdfError);
+  document.getElementById('loading-overlay').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
+
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      currentFilter = tab.dataset.tab;
+      document.getElementById('panel-' + currentFilter).classList.add('active');
+      if (currentFilter === 'stats') renderStats();
+      else if (currentFilter === 'counties') renderCounties();
+      else if (currentFilter === 'warrants') loadWarrants();
+      else if (currentFilter === 'links') { /* static */ }
+      else renderAll();
+    });
+  });
+
+  document.getElementById('search').addEventListener('input', e => {
+    searchQuery = e.target.value;
+    if (currentFilter !== 'stats' && currentFilter !== 'counties' && currentFilter !== 'links') renderAll();
+  });
+}
+
+// ── Data helpers ──────────────────────────────────────────────────────────────
+function applySearch(data) {
+  if (!searchQuery) return data;
+  const q = searchQuery.toLowerCase();
+  return data.filter(r =>
+    r.name.toLowerCase().includes(q) ||
+    r.holds.toLowerCase().includes(q) ||
+    r.num.toLowerCase().includes(q)
+  );
+}
+
+function getFiltered() {
+  let data = applySearch(RAW);
+  data.sort((a, b) => {
+    let va, vb;
+    if      (sortField === 'name')    { va = a.name; vb = b.name; }
+    else if (sortField === 'age')     { va = a.age;  vb = b.age; }
+    else if (sortField === 'booking') { va = parseDate(a.booking); vb = parseDate(b.booking); }
+    return va < vb ? -sortDir : va > vb ? sortDir : 0;
+  });
+  return data;
+}
+
+function parseDate(str) {
+  if (!str) return new Date(0);
+  const parts = str.trim().split(' ');
+  const [mo, day, yr] = parts[0].split('/').map(Number);
+  const y = yr < 100 ? (yr > 50 ? 1900 : 2000) + yr : yr;
+  if (parts[1]) {
+    const [hh, mm] = parts[1].split(':').map(Number);
+    return new Date(y, mo - 1, day, hh, mm);
+  }
+  return new Date(y, mo - 1, day);
+}
+
+function elapsed(str) {
+  const ms = Date.now() - parseDate(str).getTime();
+  if (ms <= 0) return '—';
+  const totalMins = Math.floor(ms / 60000);
+  const days = Math.floor(totalMins / 1440);
+  const hrs  = Math.floor((totalMins % 1440) / 60);
+  const mins = totalMins % 60;
+  if (days > 0) return `${days}d ${hrs}h ${mins}m`;
+  if (hrs  > 0) return `${hrs}h ${mins}m`;
+  return `${mins}m`;
+}
+
+// ── Table rendering ───────────────────────────────────────────────────────────
+const THEAD_HTML = `<tr>
+  <th data-field="name">Name <span>↕</span></th>
+  <th data-field="age">Age <span>↕</span></th>
+  <th>Sex</th>
+  <th data-field="booking">Booking Date <span>↕</span></th>
+  <th>Days Elapsed</th>
+  <th>Booking #</th>
+  <th>Search</th>
+</tr>`;
+
+function renderTable(data, pdfError) {
+  const panel     = document.getElementById('panel-all');
+  const table     = panel.querySelector('table');
+  const noResults = panel.querySelector('.no-results');
+
+  table.querySelector('thead').innerHTML = THEAD_HTML;
+  table.querySelectorAll('th[data-field]').forEach(th => {
+    th.classList.toggle('sorted', th.dataset.field === sortField);
+    th.onclick = () => {
+      sortField === th.dataset.field ? (sortDir *= -1) : (sortField = th.dataset.field, sortDir = 1);
+      renderAll();
+    };
+  });
+
+  if (!data.length) {
+    table.style.display = 'none';
+    if (pdfError) {
+      noResults.innerHTML = '⚠ ' + pdfError + '<br><br>All other tabs (Arrest Warrants, County Websites, Links) are fully available.';
+      noResults.style.color = 'var(--muted)';
+    } else {
+      noResults.innerHTML = 'No matching records';
+      noResults.style.color = '';
+    }
+    noResults.style.display = '';
+    return;
+  }
+  table.style.display = '';
+  noResults.style.display = 'none';
+  table.querySelector('tbody').innerHTML = data.map(r => `<tr>
+    <td class="name-cell">${r.name}</td>
+    <td class="age-cell">${r.age}</td>
+    <td><span class="sex-badge">${r.sex[0]}</span></td>
+    <td class="date-cell">${r.booking}</td>
+    <td class="elapsed-cell">${elapsed(r.booking)}</td>
+    <td class="booking-num">${r.num}</td>
+    <td class="search-cell">${searchIcons(r.name)}</td>
+  </tr>`).join('');
+}
+
+function renderAll(pdfError) {
+  document.getElementById('cnt-all').textContent = RAW.length ? applySearch(RAW).length : '—';
+  renderTable(getFiltered(), pdfError);
+}
+
+// ── Overview ──────────────────────────────────────────────────────────────────
+function renderStats() {
+  const count = f => RAW.filter(f).length;
+  const ages  = RAW.map(r => r.age).filter(a => a > 0 && a < 120);
+  const avg   = ages.length ? Math.round(ages.reduce((s, a) => s + a, 0) / ages.length) : '—';
+
+  document.getElementById('stats-grid').innerHTML = [
+    ['Total Inmates', RAW.length],
+    ['Male',          count(r => r.sex === 'Male')],
+    ['Female',        count(r => r.sex === 'Female')],
+    ['With Warrants', count(r => /warrant/i.test(r.holds))],
+    ['Drug-Related',  count(r => /drug|paraphernalia|possession of dangerous/i.test(r.holds))],
+    ['Violent',       count(r => /homicide|assault with weapon|strangulation|robbery|sexual intercourse without consent|sexual abuse of children|kidnapping/i.test(r.holds))],
+    ['Average Age',   avg],
+  ].map(([l, v]) => `<div class="stat-card"><div class="label">${l}</div><div class="value">${v}</div></div>`).join('');
+
+  const bar = (n, max) => `<div class="bar-wrap"><div class="bar" style="width:${Math.round(n / Math.max(max, 1) * 100)}%"></div></div>`;
+
+  const holds = [
+    ['Warrant',   count(r => /warrant/i.test(r.holds))],
+    ['Charge',    count(r => /charge:/i.test(r.holds))],
+    ['Sentenced', count(r => /sentenced|weekender/i.test(r.holds))],
+    ['DOC Hold',  count(r => /hold for doc|hold other agencies/i.test(r.holds))],
+    ['P&P',       count(r => /p&p warrant|p&p 72/i.test(r.holds))],
+  ];
+  const maxH = Math.max(...holds.map(h => h[1]));
+  document.getElementById('hold-breakdown').innerHTML =
+    holds.map(([l, n]) => `<div class="breakdown-row"><span style="min-width:100px">${l}</span>${bar(n, maxH)}<span class="num">${n}</span></div>`).join('');
+
+  const cats = [
+    ['Partner/Family Assault', count(r => /partner.*family.*assault|family member assault/i.test(r.holds))],
+    ['Drug Possession',        count(r => /possession of dangerous/i.test(r.holds))],
+    ['Burglary / Theft',       count(r => /burglary|theft/i.test(r.holds))],
+    ['Assault w/ Weapon',      count(r => /assault with weapon/i.test(r.holds))],
+    ['Strangulation',          count(r => /strangulation/i.test(r.holds))],
+    ['Homicide',               count(r => /homicide/i.test(r.holds))],
+  ];
+  const maxC = Math.max(...cats.map(c => c[1]));
+  document.getElementById('charge-breakdown').innerHTML =
+    cats.map(([l, n]) => `<div class="breakdown-row"><span style="min-width:140px;font-size:12px">${l}</span>${bar(n, maxC)}<span class="num">${n}</span></div>`).join('');
+}
+
+// ── Search icons ──────────────────────────────────────────────────────────────
+// Fix #2 & #3: parseName() inlined here; separate function removed.
+function searchIcons(full) {
+  full = full.trim();
+  let last = full, first = '';
+  if (full.includes(',')) {
+    [last, ...rest] = full.split(',');
+    first = rest.join(',').trim().split(' ')[0] || '';
+  } else {
+    const parts = full.split(' ');
+    last  = parts[0];
+    first = parts[1] && !['JR','SR','II','III','IV'].includes(parts[1].toUpperCase()) ? parts[1] : '';
+  }
+  const tc = s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+  first = tc(first); last = tc(last);
+
+  const q = buildQuery(first, last);
+
+  const icons = [
+    // ── Search engines ────────────────────────────────────────────────────────
+    { title: 'Search Google',     href: `https://www.google.com/search?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>` },
+    { title: 'Search Bing',       href: `https://www.bing.com/search?q=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#008373"><path d="M5 2v16.5l4.5 2.5 8-4.5-3.5-2.5-2.5 1V7l-1.5-.5V2H5zm4.5 7.5l4 1.5-5.5 3V9.5z"/></svg>` },
+    { title: 'Search DuckDuckGo', href: `https://duckduckgo.com/?q=${q}`,
+      svg: `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#DE5833"/><circle cx="50" cy="42" r="24" fill="white"/><circle cx="57" cy="38" r="5" fill="#4C4C4C"/><circle cx="59" cy="37" r="2" fill="white"/><path d="M38 55 Q50 65 62 55" stroke="#4C4C4C" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="72" rx="14" ry="8" fill="#F5A623"/></svg>` },
+    { title: 'Search Yahoo',      href: `https://search.yahoo.com/search?p=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#6001D2"><path d="M0 4h4.5l3.5 6.5L11.5 4H16l-6 10.5V22H6v-7.5L0 4zm16 0h4l-5.5 8.5h-2.5L16 4zm-1 14a1.5 1.5 0 110 3 1.5 1.5 0 010-3z"/></svg>` },
+    { title: 'Search Yandex',     href: `https://yandex.com/search/?text=${q}`,
+      svg: `<svg viewBox="0 0 24 24" fill="#FC3F1D"><path d="M14.993 0H12.27C8.274 0 6.01 2.04 6.01 5.388c0 2.774 1.29 4.428 3.93 6.252L6 18.967V19h3.46l4.206-7.938-.93-.618C10.627 8.88 9.75 7.67 9.75 5.28c0-1.986 1.23-3.11 3.41-3.11h1.47V19H17.9V0h-2.907z"/></svg>` },
+    // ── Social — identity-focused ─────────────────────────────────────────────
+    { title: 'Search Facebook',   href: `https://www.facebook.com/search/people/?q=${q}`,
       svg: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>` },
     { title: 'Search LinkedIn',   href: `https://www.linkedin.com/search/results/people/?keywords=${q}`,
       svg: `<svg viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.4 2H3.6A1.6 1.6 0 002 3.6v16.8A1.6 1.6 0 003.6 22h16.8a1.6 1.6 0 001.6-1.6V3.6A1.6 1.6 0 0020.4 2zM8 19H5.5V10H8v9zM6.7 8.7A1.5 1.5 0 115.2 7.2a1.5 1.5 0 011.5 1.5zm12.3 10.3h-2.5v-4.4c0-1 0-2.4-1.4-2.4s-1.6 1.1-1.6 2.3V19H11V10h2.4v1.2h.1a2.7 2.7 0 012.4-1.3c2.5 0 3 1.7 3 3.8v5.3z"/></svg>` },
